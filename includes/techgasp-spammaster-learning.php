@@ -34,8 +34,8 @@ $post_data['Admin Email'] = urlencode($admin_email);
 $post_data['Web Adress'] = urlencode($web_adress);
 $post_data['Total Users'] = urlencode($total_users);
 $post_data['Protection'] = urlencode($spammaster_protection);
-$post_data['REGSITRATION EMAIL'] = urlencode($registered_email);
-$post_data['REGSITRATION IP'] = urlencode($registered_ip);
+$post_data['REGISTRATION EMAIL'] = urlencode($registered_email);
+$post_data['REGISTRATION IP'] = urlencode($registered_ip);
 
 //traverse array and prepare data for posting (key1=value1)
 foreach ( $post_data as $key => $value) {$post_items[] = $key . '=' . $value;}
