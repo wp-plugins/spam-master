@@ -7,6 +7,30 @@ Author URI: http://wordpress.techgasp.com
 add_action( 'user_register', 'spammaster_learning' );
 add_filter( 'pre_comment_user_ip', 'spammaster_learning' );
 function spammaster_learning(){
+
+if ( get_option('spammaster_response_key') == 200 ){
+$spammaster_date = date( 'H', current_time( 'timestamp', 0 ) );
+$spammaster_blog_date = date( 'H', current_time( 'timestamp', 0 ) );
+update_option( 'spammaster_blog_date', $spammaster_blog_date);
+
+	if ( get_option('spammaster_blog_date') !== get_option('spammaster_date')){
+$spammaster_keys_url = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
+$spammaster_keys_url_get = base64_decode(get_option('spammaster_trd_full'));
+$curl = curl_init($spammaster_keys_url_get);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+$spammaster_full_keys = curl_exec($curl);
+curl_close($curl);
+update_option('spammaster_full_keys', $spammaster_full_keys);
+update_option( 'spammaster_date', $spammaster_date);
+	}
+	else{
+	}
+}
+else{
+$spammaster_full_keys = "";
+update_option('spammaster_full_keys', $spammaster_full_keys);
+}
+
 if ( get_option('spammaster_selected') == 'Full Protection' ){
 global $wpdb;
 //url to post
@@ -23,6 +47,7 @@ $blog = get_option('blogname');
 $admin_email = get_option('admin_email');
 $web_adress = get_site_url();
 $total_users = $result_count;
+$spammaster_version = get_option('spammaster_version');
 $spammaster_protection = get_option('spammaster_selected');
 $registered_email = $result_email;
 $registered_ip = $result_ip;
@@ -34,6 +59,7 @@ $post_data['Blog Name'] = urlencode($blog);
 $post_data['Admin Email'] = urlencode($admin_email);
 $post_data['Web Adress'] = urlencode($web_adress);
 $post_data['Total Users'] = urlencode($total_users);
+$post_data['Spam Master']	= urlencode($spammaster_version);
 $post_data['Protection'] = urlencode($spammaster_protection);
 $post_data['REGISTRATION EMAIL'] = urlencode($registered_email);
 $post_data['REGISTRATION IP'] = urlencode($registered_ip);

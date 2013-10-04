@@ -15,15 +15,17 @@ $wordpress = get_bloginfo('version');
 $blog = get_option('blogname');
 $admin_email = get_option('admin_email');
 $web_adress = get_site_url();
+$spammaster_version = get_option('spammaster_version');
 $spammaster_protection = get_option('spammaster_selected');
 $license = get_option('spammaster_license_code');
-$post_data['Time'] = urlencode($time);
-$post_data['Wordpress'] = urlencode($wordpress);
-$post_data['Blog Name'] = urlencode($blog);
-$post_data['Admin Email'] = urlencode($admin_email);
-$post_data['Web Adress'] = urlencode($web_adress);
-$post_data['Protection'] = urlencode($spammaster_protection);
-$post_data['License Code'] = urlencode($license);
+$post_data['Time']			= urlencode($time);
+$post_data['Wordpress']		= urlencode($wordpress);
+$post_data['Blog Name']		= urlencode($blog);
+$post_data['Admin Email']	= urlencode($admin_email);
+$post_data['Web Adress']	= urlencode($web_adress);
+$post_data['Spam Master']	= urlencode($spammaster_version);
+$post_data['Protection']	= urlencode($spammaster_protection);
+$post_data['License Code']	= urlencode($license);
 
 //traverse array and prepare data for posting (key1=value1)
 foreach ( $post_data as $key => $value) {$post_items[] = $key . '=' . $value;}

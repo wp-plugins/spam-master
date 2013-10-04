@@ -2,7 +2,7 @@
 /**
 Plugin Name: Spam Master
 Plugin URI: http://wordpress.techgasp.com/spam-master/
-Version: 2.2
+Version: 2.3
 Author: TechGasp
 Author URI: http://wordpress.techgasp.com
 Text Domain: spam-master
@@ -24,6 +24,11 @@ License: GPL2 or later
 	along with this program; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+///////DEFINE VERSION///////
+define( 'SPAMMASTER_VERSION', '2.3' );
+$spammaster_version = "2.3"; //for other pages
+update_option( 'spammaster_version', $spammaster_version );
 
 // HOOK INVITATION
 require_once('includes/techgasp-spammaster-invite.php');
@@ -294,19 +299,6 @@ update_option('spammaster_license_code', $license_new_code);
 }
 }
 }
-//Protection List
-//$spammaster_protection = "no lic.";
-//update_option('spammaster_protection', $spammaster_protection);
-//if (isset($_POST['spammaster_protection'])){
-//if  ($spammaster_protection = $_POST['spammaster_protection']){
-//if( is_multisite() ){
-//update_site_option('spammaster_protection', $spammaster_protection);
-//}
-//else {
-//update_option('spammaster_protection', $spammaster_protection);
-//}
-//}
-//}
 ?>
 <form method="post" width='1'>
 <fieldset class="options">
@@ -324,27 +316,6 @@ $trd_free = "spammaster_trd_free";
 add_option('spammaster_trd_free', $trd_free);
 $trd_full = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
 add_option('spammaster_trd_full', $trd_full);
-if ( get_option('spammaster_response_key') == 200 ){
-$spammaster_date = date( 'Y-m-d', current_time( 'timestamp', 0 ) );
-$spammaster_blog_date  = date( 'Y-m-d', current_time( 'timestamp', 0 ) );
-update_option( 'spammaster_blog_date', $spammaster_blog_date);
-	if ( get_option('spammaster_blog_date') !== get_option('spammaster_date') ){
-$spammaster_keys_url = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
-$spammaster_keys_url_get = base64_decode(get_option('spammaster_trd_full'));
-$curl = curl_init($spammaster_keys_url_get);
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-$spammaster_full_keys = curl_exec($curl);
-curl_close($curl);
-update_option('spammaster_full_keys', $spammaster_full_keys);
-update_option( 'spammaster_date', $spammaster_date);
-	}
-	else{
-	}
-}
-else{
-$spammaster_full_keys = "";
-update_option('spammaster_full_keys', $spammaster_full_keys);
-}
 ?>
 <tr>
 <td width="280" height="25" align="center">Insert Spam Master License: <input id="spammaster_license_code" name="spammaster_license_code" type="text" size="16" maxlength="16" value="<?php echo get_option('spammaster_license_code'); ?>" ></td>

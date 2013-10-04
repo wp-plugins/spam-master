@@ -3,7 +3,7 @@ Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
 Tested up to: 3.6
-Stable tag: 2.2
+Stable tag: 2.3
 License: GPLv2 or later
 
 Spam Master is the Ultimate Spam Protection plugin that blocks new user registrations and post comments with Real Time anti-spam lists.
@@ -21,7 +21,13 @@ The plugin comes packed with automated Spam Learning function that will make you
 
 Very few plugins will actually show the statistics we packed into spam master. Selected Protection Level, Total Website Users, Total Spam Blocked, Total Number of Threats you are Protected from, Spam Learning, Status of RBL Spam Servers, and a list of the last 5 users registrations with (user id, registration date, user status, name, username, and email).
 
-IMPORTANT: Makes no use of Javascript or Ajax to keep your website fast and conflicts free
+Makes no use of Javascript or Ajax to keep your website fast and conflicts free
+
+**IMPORTANT: Free Protection Version only protects you from hotmail, msn, live and outlook spam**
+
+IMPORTANT: Full Protection Version requires paid RBL license to work and protects you from thousands of spam sources [Full Protection License Link](http://wordpress.techgasp.com/spam-master/)
+
+Makes no use of Javascript or Ajax to keep your website fast and conflicts free
 
 **Spam Master... keeps your professional wordpress clean**
 
@@ -39,14 +45,14 @@ IMPORTANT: Makes no use of Javascript or Ajax to keep your website fast and conf
 * IMPORTANT: Free Version only protects you from hotmail, msn, live and outlook spam
 * IMPORTANT: Full Version requires paid RBL license to work and protects you from thousands of spam sources
 
-[Full Version Link](http://wordpress.techgasp.com/spam-master/)
+[Full Protection License Link](http://wordpress.techgasp.com/spam-master/)
 
 
 == Installation ==
 
 1. Upload everything into the "/wp-content/plugins/" directory of your WordPress site.
 2. Activate in the "Plugins" admin panel.
-3. Visit the "Widget Page | SoundCloud Master" to configure the settings and your template widget position.
+3. Visit the "Settings Page | Spam Master".
 
 
 == Frequently Asked Questions ==
@@ -77,6 +83,10 @@ IMPORTANT: Makes no use of Javascript or Ajax to keep your website fast and conf
 
 == Changelog ==
 
+= 2.3 =
+* Forcing list refresh in case of sluggish servers
+* Overall speed optimization
+
 = 2.2 =
 * Fixing issues with learning mode
 * Changing status display colors
@@ -98,6 +108,9 @@ IMPORTANT: Makes no use of Javascript or Ajax to keep your website fast and conf
 
 
 == Upgrade Notice ==
+
+= 2.3 =
+* IMPORTANT upgrade to version 2.3
 
 = 2.1 =
 * IMPORTANT upgrade to v2.1
