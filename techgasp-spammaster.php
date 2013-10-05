@@ -2,7 +2,7 @@
 /**
 Plugin Name: Spam Master
 Plugin URI: http://wordpress.techgasp.com/spam-master/
-Version: 2.3
+Version: 2.4
 Author: TechGasp
 Author URI: http://wordpress.techgasp.com
 Text Domain: spam-master
@@ -26,8 +26,8 @@ License: GPL2 or later
 */
 
 ///////DEFINE VERSION///////
-define( 'SPAMMASTER_VERSION', '2.3' );
-$spammaster_version = "2.3"; //for other pages
+define( 'SPAMMASTER_VERSION', '2.4' );
+$spammaster_version = "2.4"; //for other pages
 update_option( 'spammaster_version', $spammaster_version );
 
 // HOOK INVITATION
@@ -96,9 +96,6 @@ include_once('includes/techgasp-spammaster-learning.php');
 		// REGISTRATION WITHOUT BUDDYPRESS //
 		/////////////////////////////////////
 		function spammaster($user_login, $user_email, $errors) {
-		global $user_login;
-		global $user_email;
-		global $errors;
 		//Check Wordpress for Multisite
 		if( is_multisite() ) { 
 		$spammaster_blacklist = get_site_option('spammaster_keys');
@@ -115,7 +112,7 @@ include_once('includes/techgasp-spammaster-learning.php');
 		if(stripos($user_email, $blacklist_current) !== false)
 		{
 		$errors->add('invalid_email', '<strong>SPAM MASTER: </strong>'.__( get_option('spammaster_message') ));
-		$count = $result;
+		$count = $errors;
 		$count = mysql_query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spammaster_block_count'");
 		return;
 		}
@@ -197,16 +194,16 @@ include_once('includes/techgasp-spammaster-learning.php');
 		///////////////////////
 		if( is_multisite() ) {
 		add_action( 'network_admin_menu', 'menu' );
-		add_action( 'user_register', 'spammaster_get_keys' );
+		//add_action( 'user_register', 'spammaster_get_keys' );
 		}
 		else {
 		add_action( 'admin_menu', 'options_page' );
 		add_action( 'bp_include', 'spammaster_buddypress_init' );
 		add_filter( 'bp_core_validate_user_signup', 'spammaster_buddypress_register' );
 		add_action( 'register_post', 'spammaster', 10, 3 );
-		add_action( 'user_register', 'spammaster_block' );
+		//add_action( 'user_register', 'spammaster' );
 		register_activation_hook( __FILE__, 'spammaster_active' );
-		register_uninstall_hook( __FILE__, 'spammaster_uninstall' );
+		//register_uninstall_hook( __FILE__, 'spammaster_uninstall' );
 		}
 		////////////////////////
 		// ADMINISTRATOR PAGE //
