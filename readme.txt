@@ -76,9 +76,10 @@ Makes no use of Javascript or Ajax to keep your website fast and conflicts free
 
 1. Spam Master Backend Statistics
 2. Spam Master Backend User Management
-3. Spam Master Frontend Blocking User Registration
-4. Spam Master Marking Comment as SPAM from Registered User
-5. IMPORTANT: Spam Master marking Comment as SPAM after akismet cleared it
+3. Spam Master Wordpress Blocking User Registration
+4. Spam Master Wordpress with Budypress Blocking User Registration
+5. Spam Master Marking Comment as SPAM from Registered User
+6. IMPORTANT: Spam Master marking Comment as SPAM after akismet cleared it
 
 
 == Changelog ==
