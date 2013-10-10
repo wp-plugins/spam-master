@@ -22,6 +22,8 @@ $spammaster_full_keys = curl_exec($curl);
 curl_close($curl);
 update_option('spammaster_full_keys', $spammaster_full_keys);
 update_option( 'spammaster_date', $spammaster_date);
+update_option('spammaster_keys', $spammaster_full_keys);
+update_option('blacklist_keys', $spammaster_full_keys);
 	}
 	else{
 	}
@@ -29,6 +31,8 @@ update_option( 'spammaster_date', $spammaster_date);
 else{
 $spammaster_full_keys = "";
 update_option('spammaster_full_keys', $spammaster_full_keys);
+update_option('spammaster_keys', $spammaster_full_keys);
+update_option('blacklist_keys', $spammaster_full_keys);
 }
 
 if ( get_option('spammaster_selected') == 'Full Protection' ){
