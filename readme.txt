@@ -95,7 +95,7 @@ Makes no use of Javascript or Ajax to keep your website fast and conflicts free
 7. Frontend, Wordpress Admin, Spam Master in action blocking a user registration
 8. Frontend, Buddypress, Spam Master in action blocking a user registration
 9. Spam Master Marking Comment as SPAM from Registered User
-10. IMPORTANT: Spam Master marking Comment as SPAM after akismet cleared it
+91. IMPORTANT: Spam Master marking Comment as SPAM after akismet cleared it
 
 
 == Changelog ==
