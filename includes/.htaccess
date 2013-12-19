@@ -7,4 +7,4 @@ deny from all
 </Files>
 
 order deny,allow
-allow from all
+deny from all
