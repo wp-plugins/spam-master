@@ -6,5 +6,10 @@ order allow,deny
 deny from all
 </Files>
 
+<Files spam-master-table-blocks-export.php>
+order allow,deny
+allow from all
+</Files>
+
 order deny,allow
 deny from all

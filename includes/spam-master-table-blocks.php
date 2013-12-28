@@ -35,7 +35,7 @@ class spam_master_table_blocks extends WP_List_Table {
 	 */
 	function get_columns() {
 		return $columns= array(
-			'col_transient_blocks'	=>__('Registration Email & Date')
+			'col_transient_blocks'	=>__('Date & Registration Email'),
 		);
 	}
 

@@ -3,7 +3,7 @@ Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
 Tested up to: 3.8
-Stable tag: 4.1
+Stable tag: 4.2
 License: GPLv2 or later
 
 Spam Master is the Ultimate Spam Protection plugin that blocks new user registrations and post comments with Real Time anti-spam lists.
@@ -99,6 +99,11 @@ Makes no use of Javascript or Ajax to keep your website fast and conflicts free
 
 
 == Changelog ==
+
+= 4.2 =
+* Added export button in Blocked Registrations Page. Outputs downloadable csv file with all blocked registrations data
+* Purge Blocked Email Registrations after 7 days, keeping database clean
+* Fixed settings page deleting personal protection keys
 
 = 4.1 =
 * Wordpress 3.8 Ready

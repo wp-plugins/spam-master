@@ -16,10 +16,11 @@ sort ($spam_master_array);
 $spam_master_string = implode("\n", array_unique($spam_master_array));
 if( is_multisite() ) { 
 update_site_option('blacklist_keys', strip_tags($spam_master_string));
-update_site_option('blacklist_keys', strip_tags($spam_master_string));
+update_site_option('spam_master_full_keys', strip_tags($spam_master_string));
 }
 else {
 update_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string))));
+update_option('spam_master_full_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string))));
 }
 }
 ?>

@@ -1,4 +1,6 @@
 <?php
+//Delete Transients after  week
+require_once( dirname( __FILE__ ) . '/spam-master-table-blocks-transients.php');
 		/** function/method
 		* Usage: hooking (registering) the plugin menu
 		* Arg(0): null
@@ -51,9 +53,16 @@ $wp_list_table = new spam_master_table_blocks();
 $wp_list_table->prepare_items();
 //Table of elements
 $wp_list_table->display();
+
+function spam_master_load_export(){
+echo plugins_url( 'spam-master-table-blocks-export.php', __FILE__);
+}
+function spam_master_clean_transients(){
+echo plugins_url( 'spam-master-table-blocks-transients.php', __FILE__);
+}
 ?>
 <p>This list contains up to a week of data. Blocked registration data more than a week old is automatically deleted from your database. Reason is simple, keeping your <b>database "slim" and your website with fast page load times</b>.</p>
-<p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Refresh Lists", 'spam_master'); ?>' id='submitbutton' /></p>
+<p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Refresh List", 'spam_master'); ?>' id='submitbutton' /> <a class="button-primary" href="<?php spam_master_load_export() ?>" target="_blank" title="Export List">Export List</a></p>
 </fieldset>
 </form>
 <div style="background: url(<?php echo plugins_url('../images/techgasp-hr.png', __FILE__); ?>) repeat-x; height: 10px"></div>
