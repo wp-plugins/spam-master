@@ -1,3 +1,36 @@
+<?php
+/** function/method
+* Usage: hooking (registering) the plugin menu
+* Arg(0): null
+* Return: void
+*/
+if( is_multisite() ) {
+function menu_adm_multi(){
+// Create menu
+add_menu_page( 'Spam Master', 'Spam Master', 'manage_options', 'spam-master', 'spam_master_admin', plugins_url( 'spam-master/images/techgasp-minilogo-16.png' ), 71 );
+}
+}
+else {
+// Create menu
+function menu_adm_single(){
+if ( is_admin() )
+add_menu_page( 'Spam Master', 'Spam Master', 'manage_options', 'spam-master', 'spam_master_admin', plugins_url( 'spam-master/images/techgasp-minilogo-16.png' ), 71 );
+}
+}
+
+		///////////////////////
+		// WORDPRESS ACTIONS //
+		///////////////////////
+		if( is_multisite() ) {
+		add_action( 'network_admin_menu', 'menu_adm_multi' );
+		}
+		else {
+		add_action( 'admin_menu', 'menu_adm_single' );
+		}
+
+function spam_master_admin(){
+?>
+
 <div class="wrap">
 <div style="width:40px; vertical-align:middle; float:left;"><img src="<?php echo plugins_url('../images/techgasp-minilogo.png', __FILE__); ?>" alt="' . esc_attr__( 'TechGasp Plugins') . '" /><br /></div>
 <h2><b>&nbsp;TechGasp</b></h2>
@@ -63,3 +96,6 @@
 <a class="button-primary" href="http://wordpress.techgasp.com/spam-master-documentation/" target="_blank" title="Visit Website">Spam Master Documentation</a>
 <a class="button-primary" href="http://wordpress.org/plugins/spam-master/" target="_blank" title="Visit Website">RATE US *****</a>
 </p>
+<?php
+}
+?>

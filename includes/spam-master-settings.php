@@ -9,7 +9,6 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		if( is_multisite() ) {
 		function menu_multi(){
 		// Create menu
-		add_menu_page( 'Spam Master', 'Spam Master', 'manage_options', 'spam-master', 'spam_master_admin', plugins_url( 'spam-master/images/techgasp-minilogo-16.png' ), 71 );
 		add_submenu_page( 'spam-master', 'Settings', 'Settings', 'manage_options', 'spam-master-settings', 'spam_master_options' );
 		}
 		}
@@ -17,14 +16,8 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		// Create menu
 		function menu_single(){
 		if ( is_admin() )
-		add_menu_page( 'Spam Master', 'Spam Master', 'manage_options', 'spam-master', 'spam_master_admin', plugins_url( 'spam-master/images/techgasp-minilogo-16.png' ), 71 );
 		add_submenu_page( 'spam-master', 'Settings', 'Settings', 'manage_options', 'spam-master-settings', 'spam_master_options' );
 		}
-		}
-
-		//Load Admin page location function
-		function spam_master_admin(){
-		require_once( dirname( __FILE__ ) . '/spam-master-admin.php');
 		}
 
 		////////////////////////////////////
@@ -230,7 +223,7 @@ $trd_full = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3R
 add_option('spam_master_trd_full', $trd_full);
 ?>
 <tr>
-<td width="280" height="25" align="center">Insert Spam Master License: <input id="spam_master_license_code" name="spam_master_license_code" type="text" size="16" maxlength="16" value="<?php echo get_option('spam_master_license_code'); ?>" ></td>
+<td width="280" height="25" align="center">Insert Spam Master License: <input id="spam_master_license_code" name="spam_master_license_code" type="text" size="16" value="<?php echo get_option('spam_master_license_code'); ?>" ></td>
 <?php
 //HOOK LICENSE
 if(get_option('spam_master_license_code') !== get_option('spam_master_license_old_code')){

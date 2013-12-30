@@ -2,7 +2,7 @@
 /**
 Plugin Name: Spam Master
 Plugin URI: http://wordpress.techgasp.com/spam-master/
-Version: 4.2
+Version: 4.2.1
 Author: TechGasp
 Author URI: http://wordpress.techgasp.com
 Text Domain: spam-master
@@ -25,9 +25,11 @@ License: GPL2 or later
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 ///////DEFINE VERSION///////
-define( 'spam_master_VERSION', '4.2' );
-$spam_master_version = "4.2"; //for other pages
+define( 'spam_master_VERSION', '4.2.1' );
+$spam_master_version = "4.2.1"; //for other pages
 update_option( 'spam_master_version', $spam_master_version );
+// HOOK ADMIN
+require_once( dirname( __FILE__ ) . '/includes/spam-master-admin.php');
 // HOOK SETTINGS
 require_once( dirname( __FILE__ ) . '/includes/spam-master-settings.php');
 // HOOK Re-CAPTACHA & HONEYPOT
@@ -41,16 +43,13 @@ require_once( dirname( __FILE__ ) . '/includes/spam-master-registrations.php');
 // HOOK BLOCKS
 require_once( dirname( __FILE__ ) . '/includes/spam-master-blocks.php');
 
+add_filter( 'plugin_action_links', 'spam_master_links', 10, 2 );
 //SETTINGS LINK IN PLUGIN MANAGER
-add_filter( 'plugin_action_links', 'spam_master_link', 10, 2 );
-// Add settings link on plugin page
-function spam_master_link($links, $file) {
-static $this_plugin;
-if (!$this_plugin) $this_plugin = plugin_basename(__FILE__);
-if ($file = dirname( __FILE__ ) . '/includes/spam-master-admin.php'){
-$settings_link = '<a href="' . admin_url( 'admin.php?page=spam-master'). '">' . __( 'Settings' ) . '</a>';
-array_unshift($links, $settings_link);
-}
-return $links;
+function spam_master_links( $links, $file ) {
+	if ( $file == plugin_basename( dirname(__FILE__).'/spam-master.php' ) ) {
+		$links[] = '<a href="' . admin_url( 'admin.php?page=spam-master' ) . '">'.__( 'Settings' ).'</a>';
+	}
+
+	return $links;
 }
 ?>
