@@ -72,7 +72,14 @@ function spam_master_admin(){
 </table>
 <div style="background: url(<?php echo plugins_url('../images/techgasp-hr.png', __FILE__); ?>) repeat-x; height: 10px"></div>
 <div id="icon-tools" class="icon32" style="width:40px; vertical-align:middle;"></br></div>
-<h2>Spam Master</h2>
+<h2><b>Spam Master</b> <?php 
+if( is_multisite() ) {
+echo "Version ".get_site_option( 'spam_master_version' );
+}
+else{
+echo "Version ".get_option( 'spam_master_version' );
+}
+?></h2>
 <p>Spam Master is the ultimate spam protection plugin for WordPress that blocks new user registrations and post comments. Spam Master is buddypress ready and uses Real Time anti-spam lists.</p>
 
 <p>Spam Master was born out of need to protect our website against constant malicious spam registrations and comments that affect the majority of wordpress websites. Instead of downloading a nasty plugin "made in china", we did it the TechGasp way... coded a brand new, clean and fast plugin that will make your professional wordpress website safe and clean.Spam Master protects WordPress based websites from thousands of know spam emails, domains, ip's and words by blocking user registrations or post comments. Uses RBL technology (real time block lists) constantly being updated. Spam Master is buddypress ready and will check for buddypress user registrations and subsequent page comments of registered users.</p>

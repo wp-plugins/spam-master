@@ -2,7 +2,7 @@
 /**
 Plugin Name: Spam Master
 Plugin URI: http://wordpress.techgasp.com/spam-master/
-Version: 4.2.1
+Version: 4.2.2
 Author: TechGasp
 Author URI: http://wordpress.techgasp.com
 Text Domain: spam-master
@@ -25,9 +25,14 @@ License: GPL2 or later
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 ///////DEFINE VERSION///////
-define( 'spam_master_VERSION', '4.2.1' );
-$spam_master_version = "4.2.1"; //for other pages
+define( 'spam_master_VERSION', '4.2.2' );
+$spam_master_version = "4.2.2"; //for other pages
+if( is_multisite() ) {
+update_site_option( 'spam_master_version', $spam_master_version );
+}
+else{
 update_option( 'spam_master_version', $spam_master_version );
+}
 // HOOK ADMIN
 require_once( dirname( __FILE__ ) . '/includes/spam-master-admin.php');
 // HOOK SETTINGS
