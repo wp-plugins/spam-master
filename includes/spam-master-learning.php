@@ -2,17 +2,19 @@
 add_action( 'user_register', 'spam_master_learning' );
 add_filter( 'pre_comment_user_ip', 'spam_master_learning' );
 function spam_master_learning(){
-
+global $wpdb;
 //IF MULTI-SITE
 if( is_multisite() ) {
-//if 200 date
+//if 200 and set date
 if ( get_site_option('spam_master_response_key') == 200 ){
+//if full protection is selected
+	if( get_site_option('spam_master_protection') == get_site_option('spam_master_trd_full') ){
 $spam_master_date = date( 'H', current_time( 'timestamp', 0 ) );
 $spam_master_blog_date = date( 'H', current_time( 'timestamp', 0 ) );
 update_site_option( 'spam_master_blog_date', $spam_master_blog_date);
 
-//if 200 and date ok
-	if ( get_site_option('spam_master_blog_date') !== get_site_option('spam_master_date')){
+//if date ok
+		if ( get_site_option('spam_master_blog_date') !== get_site_option('spam_master_date')){
 $spam_master_keys_url = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
 $spam_master_keys_url_get = base64_decode(get_site_option('spam_master_trd_full'));
 $curl = curl_init($spam_master_keys_url_get);
@@ -20,38 +22,59 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 $spam_master_full_keys = curl_exec($curl);
 curl_close($curl);
 update_site_option('spam_master_full_keys', $spam_master_full_keys);
+update_site_option('spam_master_rbl_keys', $spam_master_full_keys);
 update_site_option( 'spam_master_date', $spam_master_date);
-update_site_option('spam_master_keys', $spam_master_full_keys);
 
-//keep user settings saved in blacklist_keys. Removes duplicates array_unique and empty lines trim
-$blacklist_keys = get_site_option( 'blacklist_keys' );
-$spam_master_array = array($blacklist_keys, $spam_master_full_keys);
+//set and get my keys if any
+$spam_master_my_keys = get_site_option( 'spam_master_my_keys' );
+
+//set and get new full rbl
+$spam_master_rbl_keys = get_site_option( 'spam_master_rbl_keys' );
+
+//Join my keys with full rbl keys in new blacklist. Removes duplicates array_unique and empty lines trim
+$spam_master_array = array_merge(explode("\n", $spam_master_my_keys), explode("\n", $spam_master_rbl_keys));
+$spam_master_array = array_map("trim", $spam_master_array);
 sort ($spam_master_array);
 $spam_master_string = implode("\n", array_unique($spam_master_array));
 update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string))));
-	}
+//clean keys
+		}
 	//if date NOT ok
+		else{
+		}
+	}
 	else{
 	}
 }
 //if NOT 200
 else{
-$spam_master_full_keys = "";
-update_site_option('spam_master_full_keys', $spam_master_full_keys);
-update_site_option('spam_master_keys', $spam_master_full_keys);
-update_site_option('blacklist_keys', $spam_master_full_keys);
+//re-set full and rbl to free
+$spam_master_full_keys = update_site_option('spam_master_full_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
+$spam_master_rbl_keys = update_site_option('spam_master_rbl_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
+//set and get my keys if any and new free rbl
+$spam_master_my_keys = get_site_option( 'spam_master_my_keys' );
+$spam_master_rbl_keys = get_site_option( 'spam_master_rbl_keys' );
+
+//Join my keys with free rbl keys in new blacklist. Removes duplicates array_unique and empty lines trim
+$spam_master_array = array_merge(explode("\n", $spam_master_my_keys), explode("\n", $spam_master_rbl_keys));
+$spam_master_array = array_map("trim", $spam_master_array);
+sort ($spam_master_array);
+$spam_master_string = implode("\n", array_unique($spam_master_array));
+update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string))));
 }
 }
 //IF SINGLE SITE
 else{
-//if 200 date
+//if 200 and set date
 if ( get_option('spam_master_response_key') == 200 ){
+//if full protection is selected
+	if( get_option('spam_master_protection') == get_option('spam_master_trd_full') ){
 $spam_master_date = date( 'H', current_time( 'timestamp', 0 ) );
 $spam_master_blog_date = date( 'H', current_time( 'timestamp', 0 ) );
 update_option( 'spam_master_blog_date', $spam_master_blog_date);
 
-//if 200 and date ok
-	if ( get_option('spam_master_blog_date') !== get_option('spam_master_date')){
+//if date ok
+		if ( get_option('spam_master_blog_date') !== get_option('spam_master_date')){
 $spam_master_keys_url = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
 $spam_master_keys_url_get = base64_decode(get_option('spam_master_trd_full'));
 $curl = curl_init($spam_master_keys_url_get);
@@ -59,31 +82,51 @@ curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 $spam_master_full_keys = curl_exec($curl);
 curl_close($curl);
 update_option('spam_master_full_keys', $spam_master_full_keys);
+update_option('spam_master_rbl_keys', $spam_master_full_keys);
 update_option( 'spam_master_date', $spam_master_date);
-update_option('spam_master_keys', $spam_master_full_keys);
 
-//keep user settings saved in blacklist_keys. Removes duplicates array_unique and empty lines trim
-$blacklist_keys = get_option( 'blacklist_keys' );
-$spam_master_array = array($blacklist_keys, $spam_master_full_keys);
+//set and get my keys if any
+$spam_master_my_keys = get_option( 'spam_master_my_keys' );
+
+//set and get new full rbl
+$spam_master_rbl_keys = get_option( 'spam_master_rbl_keys' );
+
+//Join my keys with full rbl keys in new blacklist. Removes duplicates array_unique and empty lines trim
+$spam_master_array = array_merge(explode("\n", $spam_master_my_keys), explode("\n", $spam_master_rbl_keys));
+$spam_master_array = array_map("trim", $spam_master_array);
 sort ($spam_master_array);
 $spam_master_string = implode("\n", array_unique($spam_master_array));
 update_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string))));
 //clean keys
-	}
+		}
 //if date NOT ok
+		else{
+		}
+//if not full protection
+	}
 	else{
 	}
 }
 //if NOT 200
 else{
-$spam_master_full_keys = "";
-update_option('spam_master_full_keys', $spam_master_full_keys);
-update_option('spam_master_keys', $spam_master_full_keys);
-update_option('blacklist_keys', $spam_master_full_keys);
-}
-}
+//re-set full and rbl to free
+$spam_master_full_keys = update_option('spam_master_full_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
+$spam_master_rbl_keys = update_option('spam_master_rbl_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
+//set and get my keys if any and new free rbl
+$spam_master_my_keys = get_option( 'spam_master_my_keys' );
+$spam_master_rbl_keys = get_option( 'spam_master_rbl_keys' );
 
-//LEARNING DATA
+//Join my keys with free rbl keys in new blacklist. Removes duplicates array_unique and empty lines trim
+$spam_master_array = array_merge(explode("\n", $spam_master_my_keys), explode("\n", $spam_master_rbl_keys));
+$spam_master_array = array_map("trim", $spam_master_array);
+sort ($spam_master_array);
+$spam_master_string = implode("\n", array_unique($spam_master_array));
+update_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string))));
+}
+}
+/////////////////
+//LEARNING DATA//
+/////////////////
 //IF MULTI-SITE
 if( is_multisite() ) {
 if ( get_site_option('spam_master_selected') == 'Full Protection' ){
