@@ -2,8 +2,8 @@
 Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
-Tested up to: 3.8
-Stable tag: 4.2.4
+Tested up to: 3.8.1
+Stable tag: 4.3
 License: GPLv2 or later
 
 Spam Master is the Ultimate Spam Protection plugin that blocks new user registrations and post comments with Real Time anti-spam lists.
@@ -19,13 +19,9 @@ The problem facing spam targeted wordpress blogs is that most of the spam regist
 
 The plugin comes packed with automated Spam Learning function that will make your wordpress blog a fighting spam enforcer by providing registration ip's and emails for analysis and spam lists inclusion.
 
-Very few plugins will actually show the statistics we packed into spam master. Selected Protection Level, Total Website Users, Total Spam Blocked, Total Number of Threats you are Protected from, Spam Learning, Status of RBL Spam Servers, and a list of the last 5 users registrations with (user id, registration date, user status, name, username, and email).
+Very few plugins will actually show the statistics we packed into spam master. Selected Protection Level, Total Website Users, Total Spam Blocked, Total Number of Threats you are Protected from, Spam Learning, Status of RBL Spam Servers, and User Registrations List with (user id, registration date, user status, name, username, and email).
 
-Makes no use of Javascript or Ajax to keep your website fast and conflicts free
-
-**IMPORTANT: Free Protection Version only protects you from hotmail, msn, live and outlook spam**
-
-**IMPORTANT: Full Protection Version requires paid RBL license to work and protects you from thousands of spam sources [Full Protection License Link](http://wordpress.techgasp.com/spam-master/)**
+**IMPORTANT: Free Protection Version only protects you from hotmail, msn, live and outlook spam. Full Protection Version requires paid RBL license to work and protects you from thousands of spam sources [Full Protection License Link](http://wordpress.techgasp.com/spam-master/)**
 
 **Makes no use of Javascript or Ajax to keep your website fast and conflicts free**
 
@@ -65,7 +61,7 @@ Makes no use of Javascript or Ajax to keep your website fast and conflicts free
 
 1. Use the Wordpress Installer, Updater.
 2. Activate in the "Plugins" admin panel.
-3. Visit the "Plugin Page | Spam Master" to configure settings.
+3. Visit the "Plugin Page Menu | Spam Master" to configure settings.
 4. [Spam Master Documentation](http://wordpress.techgasp.com/spam-master-documentation/
 
 
@@ -73,7 +69,7 @@ Makes no use of Javascript or Ajax to keep your website fast and conflicts free
 
 = Issues RBL License =
 * Please update to latest version of Spam Master
-* Patiently wait for your license to be activate by RBL Servers
+* Patiently wait for your license to be activate and replicated by RBL Servers
 
 = I DON'T HAVE A LICENSE =
 * Get a license here [License](http://wordpress.techgasp.com/spam-master/)
@@ -95,11 +91,20 @@ Makes no use of Javascript or Ajax to keep your website fast and conflicts free
 6. Protection List Page
 7. Frontend, Wordpress Admin, Spam Master in action blocking a user registration
 8. Frontend, Buddypress, Spam Master in action blocking a user registration
-9. Spam Master Marking Comment as SPAM from Registered User
-91. IMPORTANT: Spam Master marking Comment as SPAM after akismet cleared it
+9. Spam Master Marking Comment as SPAM from Registered User, Spam Master marking Comment as SPAM after akismet cleared it
 
 
 == Changelog ==
+
+= 4.3 =
+* New TechGasp Plugin Framework v3
+* New Plugin Menu
+* New Administrator Page
+* New Settings Page
+* New Statistics Page
+* New Candy Tables in Menu Pages without compromising page load times and without silly javascript
+* New Protection List Page, now includes White-List table keys to override RBL Protection List keys
+* New Spam Master Overview Widget
 
 = 4.2.4 =
 * Adding index security
@@ -176,6 +181,9 @@ Makes no use of Javascript or Ajax to keep your website fast and conflicts free
 
 
 == Upgrade Notice ==
+
+= 4.3 =
+* IMPORTANT Upgrade to new TechGasp Plugin Framework v3
 
 = 4.2.3 =
 * IMPORTANT upgrade to version 4.2.3

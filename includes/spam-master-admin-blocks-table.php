@@ -2,7 +2,7 @@
 if(!class_exists('WP_List_Table')){
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
-class spam_master_table_blocks extends WP_List_Table {
+class spam_master_blocks_table extends WP_List_Table {
 	/**
 	 * Constructor, we override the parent to pass our own arguments
 	 * We usually focus on three parameters: singular and plural labels, as well as whether the class supports AJAX.
@@ -35,7 +35,7 @@ class spam_master_table_blocks extends WP_List_Table {
 	 */
 	function get_columns() {
 		return $columns= array(
-			'col_transient_blocks'	=>__('Date & Registration Email'),
+			'col_blocks'	=>__('Date & Registration Email'),
 		);
 	}
 
@@ -45,7 +45,7 @@ class spam_master_table_blocks extends WP_List_Table {
 	 */
 		function get_sortable_columns() {
 		return $sortable = array(
-			'col_transient_blocks'	=>	array('option_value',false)
+			'col_blocks'	=>	array('option_value',false)
 		);
 	}
 
@@ -134,8 +134,9 @@ class spam_master_table_blocks extends WP_List_Table {
 //				$editlink_unmark  = '/wp-admin/user-edit.php?user_id='.(int)$rec->ID;
 
 				//Display the cell
+
 				switch ( $column_name ) {
-					case "col_transient_blocks":	echo '<td '.$attributes.'>'.stripslashes($rec->option_value).'</td>';break;
+					case "col_blocks":	echo '<td '.$attributes.'>'.stripslashes($rec->option_value).'</td>';break;
 				}
 			}
 

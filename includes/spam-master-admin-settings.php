@@ -210,16 +210,37 @@ update_option('spam_master_license_code', $license_new_code);
 }
 }
 }
+//LOAD Table Class - Table starts below
+if(!class_exists('WP_List_Table')){
+	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+}
 ?>
 <form method="post" width='1'>
 <fieldset class="options">
-<legend><h3><?php _e('Your License Status & Protection Level', 'spam_master'); ?></h3></legend>
-<br>
-<table>
+<table class="widefat fixed" cellspacing="0">
+	<thead>
+		<tr>
+			<th id="columnname" class="manage-column column-columnname" scope="col" width="250"><legend><h3><img src="<?php echo plugins_url('../images/techgasp-minilogo-16.png', __FILE__); ?>" style="float:left; height:16px; vertical-align:middle;" /><?php _e('&nbsp;License Status', 'spam_master'); ?></h3></legend></th>
+			<th id="columnname" class="manage-column column-columnname" scope="col" width="250"></th>
+			<th id="columnname" class="manage-column column-columnname" scope="col"></th>
+		</tr>
+	</thead>
+
+	<tfoot>
+		<tr>
+			<th class="manage-column column-columnname" scope="col" width="250">
+<p class="submit" style="margin-top:-10px !important; margin-bottom:-18px !important"><input class='button-primary' type='submit' name='update' value='<?php _e("Save & Refresh", 'spam_master'); ?>' id='submitbutton' /></p>
+			</th>
+			<th class="manage-column column-columnname" scope="col" width="250"></th>
+			<th class="manage-column column-columnname" scope="col"></th>
+		</tr>
+	</tfoot>
+
+	<tbody>
 <?php
 //Display Selected Protection
-$spam_master_free_selected = "Free Protection";
-$spam_master_full_selected = "Full Protection";
+$spam_master_free_selected = "FREE PROTECTION";
+$spam_master_full_selected = "FULL PROTECTION";
 $key_lic = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvbGljLnR4dA==";
 $key_code = wp_remote_get(''.base64_decode($key_lic).'');
 $response_key = wp_remote_retrieve_response_code( $key_code );
@@ -240,15 +261,46 @@ $trd_full = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3R
 add_option('spam_master_trd_full', $trd_full);
 }
 ?>
-<tr>
-<td width="280" height="25" align="center">Insert Spam Master License: <input id="spam_master_license_code" name="spam_master_license_code" type="text" size="16" value="<?php 
+		<tr class="alternate">
+			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
+Insert Spam Master License: 
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" width="250"><input id="spam_master_license_code" name="spam_master_license_code" type="text" size="16" value="<?php 
 if( is_multisite() ) {
 echo get_site_option('spam_master_license_code');
 }
 else{
 echo get_option('spam_master_license_code');
 }
-?>"></td>
+?>">
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_license_color');
+}
+else{
+echo get_option('spam_master_license_color');
+}
+?>"><font color="white"><b><?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_license_status');
+}
+else{
+echo get_option('spam_master_license_status');
+}
+?></b></font>
+			</td>
+		</tr>
+		<tr>
+			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
+<a class="button-secondary" href="http://wordpress.techgasp.com/spam-master/" target="_blank" title="Visit Website">get rbl protection license</a>
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle"></td>
+		</tr>
+
+
+
 <?php
 //HOOK LICENSE
 if( is_multisite() ) {
@@ -266,8 +318,29 @@ else {
 }
 }
 ?>
-<td width="20" height="25" align="center"></td>
-<td width="120" height="25">
+	</tbody>
+</table>
+<br>
+<table class="widefat fixed" cellspacing="0">
+	<thead>
+		<tr>
+			<th id="columnname" class="manage-column column-columnname" scope="col" width="250"><legend><h3><img src="<?php echo plugins_url('../images/techgasp-minilogo-16.png', __FILE__); ?>" style="float:left; height:16px; vertical-align:middle;" /><?php _e('&nbsp;Protection Level', 'spam_master'); ?></h3></legend></th>
+			<th id="columnname" class="manage-column column-columnname" scope="col" width="250"></th>
+			<th id="columnname" class="manage-column column-columnname" scope="col"></th>
+		</tr>
+	</thead>
+
+	<tfoot>
+		<tr>
+			<th class="manage-column column-columnname" scope="col" width="250">
+<p class="submit" style="margin-top:-10px !important; margin-bottom:-18px !important"><input class='button-primary' type='submit' name='update' value='<?php _e("Save & Refresh", 'spam_master'); ?>' id='submitbutton' /></p>
+			</th>
+			<th class="manage-column column-columnname" scope="col" width="250"></th>
+			<th class="manage-column column-columnname" scope="col"></th>
+		</tr>
+	</tfoot>
+
+	<tbody>
 <?php
 //Protection List
 if ( $_POST) {
@@ -280,6 +353,11 @@ update_option('spam_master_protection', $_POST['spam_master_protection'] );
 }
 }
 ?>
+<tr class="alternate">
+			<td class="column-columnname" style="vertical-align:middle" width="250">
+Select Protection Level:
+			</td>
+			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
 <select id="spam_master_protection" name="spam_master_protection">
 <option>SELECT PROTECTION</option>
 <option value="<?php
@@ -315,6 +393,26 @@ echo get_option('spam_master_protection') == 'aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3
 }
 ?>>Full Protection</option>
 </select>
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
+<font color="white"><b><?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_selected');
+}
+else{
+echo get_option('spam_master_selected');
+}
+?></b></font>
+			</td>
+		</tr>
+		<tr class="alternate">
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle">
+<p><b>FREE PROTECTION</b>, if you do not have a license code it is very important that you select Free Protection in Protection Selector. Free protection grants you immunity against 4 threats Hotmail, Live, Msn and Outlook and you can manually add more in the Protection List page.</p>
+<p><b>FULL PROTECTION</b>, insert your license code and press Save & Refresh. The license code can be found at the top of your purchase email <b>Order Number : 4996195009</b>, the license code to insert would be <b>4996195009</b>. If you already inserted the license code and are getting "Invalid / Awaiting Authorization", it might take a few hours for your license to be accepted and replicated in all Real Time Scan servers.</p>
+			</td>
+		</tr>
 <?php
 //IF MULTI-SITE
 if( is_multisite() ) {
@@ -416,7 +514,7 @@ update_site_option('spam_master_protection', $trd_full);
 	else {
 		$license_color = "E8052B";
 		update_site_option('spam_master_license_color', $license_color);
-		$license_status = "No Valid License, Select Free Protection >>>";
+		$license_status = "No Valid License, Select Free Protection";
 		update_site_option('spam_master_license_status', $license_status);
 		$full_rbl_color = "525051";
 		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
@@ -428,9 +526,9 @@ update_site_option('spam_master_protection', $trd_full);
 		update_site_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "F2AE41";
 		update_site_option('spam_master_learning_color', $learning_color);
-		$learning_status = "No License, OFFLINE";
+		$learning_status = "No License, Learning OFFLINE";
 		update_site_option('spam_master_learning_status', $learning_status);
-		$protection_total = "No License, 0";
+		$protection_total = "No License, 4 RBL FREE";
 		update_site_option('spam_master_protection_total', $protection_total);
 		$protection_number_color = "F2AE41";
 		update_site_option('spam_master_protection_number_color', $protection_number_color);
@@ -544,7 +642,7 @@ update_option('spam_master_protection', $trd_full);
 	else {
 		$license_color = "E8052B";
 		update_option('spam_master_license_color', $license_color);
-		$license_status = "No Valid License, Select Free Protection >>>";
+		$license_status = "No Valid License, Select Free Protection";
 		update_option('spam_master_license_status', $license_status);
 		$full_rbl_color = "525051";
 		update_option('spam_master_full_rbl_color', $full_rbl_color);
@@ -556,9 +654,9 @@ update_option('spam_master_protection', $trd_full);
 		update_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "F2AE41";
 		update_option('spam_master_learning_color', $learning_color);
-		$learning_status = "No License, OFFLINE";
+		$learning_status = "No License, Learning OFFLINE";
 		update_option('spam_master_learning_status', $learning_status);
-		$protection_total = "No License, 0";
+		$protection_total = "No License, 4 RBL FREE";
 		update_option('spam_master_protection_total', $protection_total);
 		$protection_number_color = "F2AE41";
 		update_option('spam_master_protection_number_color', $protection_number_color);
@@ -574,154 +672,39 @@ update_option('spam_master_protection', $trd_full);
 }
 }
 ?>
-</td>
-<td width="20" height="20">
-<td width="140" height="25" align="center">Total Users</td>
-<td width="1" height="25" align="center"></td>
-<td width="140" height="25" align="center">Total Spam</td>
-<td width="1" height="20">
-<td width="220" height="25" align="center">Primary RBL Server Cluster</td>
-</tr>
-<tr>
-<td width="280" height="25"align="center" bgcolor="#<?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_license_color');
-}
-else{
-echo get_option('spam_master_license_color');
-}
-?>"><font color="white"><b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_license_status');
-}
-else{
-echo get_option('spam_master_license_status');
-}
-?></b></font></td>
-<td width="20" height="25" align="center"></td>
-<td width="120" height="25" align="center" bgcolor="#078BB3"><font color="white"><b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_selected');
-}
-else{
-echo get_option('spam_master_selected');
-}
-?></b></font></td>
-<td width="20" height="25"></td>
-<td width="140" height="25" align="center" bgcolor="#078BB3"><font color="white"><b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_user_registrations');
-}
-else{
-echo get_option('spam_master_user_registrations');
-}
-?></b> Registered</font></td>
-<td width="1" height="25"></td>
-<td width="140" height="25" align="center" bgcolor="#078BB3"><font color="white"><b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_block_count');
-}
-else{
-echo get_option('spam_master_block_count');
-}
-?></b> Blocks</font></td>
-<td width="1" height="25"></td>
-<td width="220" height="25" align="center" bgcolor="#<?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_full_rbl_color');
-}
-else{
-echo get_option('spam_master_full_rbl_color');
-}
-?>"><font color="white">Cluster Status: <b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_full_rbl_status');
-}
-else{
-echo get_option('spam_master_full_rbl_status');
-}
-?></b></font></td>
-</tr>
-<tr>
-<td width="280" height="25" align="center"><a class="button-secondary" href="http://wordpress.techgasp.com/spam-master/" target="_blank" title="Visit Website">get rbl protection license</a></td>
-<td width="20" height="25"></td>
-<td width="120" height="25"></td>
-<td width="20" height="25"></td>
-<td width="140" height="25" align="center">Protected Against</td>
-<td width="1" height="25"></td>
-<td width="140" height="25" align="center">Spam Learning</td>
-<td width="1" height="25"></td>
-<td width="220" height="25" align="center">Secondary RBL Server Cluster</td>
-</tr>
-<tr>
-<td width="280" height="25"></td>
-<td width="20" height="25"></td>
-<td width="120" height="25"></td>
-<td width="20" height="25"></td>
-<td width="150" height="25" align="center" bgcolor="#<?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_protection_number_color');
-}
-else{
-echo get_option('spam_master_protection_number_color');
-}
-?>"><font color="white"><b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_protection_total');
-}
-else{
-echo get_option('spam_master_protection_total');
-}
-?></b> Threats</font></td>
-<td width="1" height="25"></td>
-<td width="150" height="25" align="center" bgcolor="#<?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_learning_color');
-}
-else{
-echo get_option('spam_master_learning_color');
-}
-?>"><font color="white"><b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_learning_status');
-}
-else{
-echo get_option('spam_master_learning_status');
-}
-?></b></font></td>
-<td width="1" height="25"></td>
-<td width="220" height="25" align="center" bgcolor="#<?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_medium_rbl_color');
-}
-else{
-echo get_option('spam_master_medium_rbl_color');
-}
-?>"><font color="white">Cluster Status: <b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_medium_rbl_status');
-}
-else{
-echo get_option('spam_master_medium_rbl_status');
-}
-?></b></font></td>
-</tr>
+	</tbody>
 </table>
-</fieldset>
-<tr>
-<p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Save & Refresh", 'spam_master'); ?>' id='submitbutton' /></p>
-<p><b>Full Protection:</b></p>
-<p>Insert your license code and press Save & Refresh. The license code can be found at the top of your purchase email  <b>Order Number : 4996195009</b>, the license code to insert would be <b>4996195009</b>. If you already inserted the license code and are getting "Invalid / Awaiting Authorization", it might take a few hours for your license to be accepted and replicated in all Real Time Scan servers.</p>
-<p><b>Free Protection:</b></p>
-<p>If you do not have a license code it is very important that you select Free Protection in above Protection Selector. Free protection grants you immunity against 4 threats Hotmail, Live, Msn and Outlook and you can manually add more in Protection List page</p>
+<br>
+<table class="widefat fixed" cellspacing="0">
+	<thead>
+		<tr>
+			<th id="columnname" class="manage-column column-columnname" scope="col"><legend><h3><img src="<?php echo plugins_url('../images/techgasp-minilogo-16.png', __FILE__); ?>" style="float:left; height:16px; vertical-align:middle;" /><?php _e('&nbsp;Edit Registration Message', 'spam_master'); ?></h3></legend></th>
+		</tr>
+	</thead>
 
-<div style="background: url(<?php echo plugins_url('../images/techgasp-hr.png', __FILE__); ?>) repeat-x; height: 10px"></div>
-<fieldset class="options">
-<legend><h3><?php _e('Edit Registration Message', 'spam_master'); ?></h3></legend>
-<p><?php _e('This message is displayed to spam users who are not allowed to register in your Wordpress. If you edit, remember there\'s not a lot of space so keep it short.', 'spam_master'); ?></p>
-<textarea name='spam_master_new_message' cols='80' rows='2'>
+	<tfoot>
+		<tr>
+			<th class="manage-column column-columnname" scope="col">
+<p class="submit" style="margin-top:-10px !important; margin-bottom:-18px !important"><input class='button-primary' type='submit' name='update' value='<?php _e("Save & Refresh", 'spam_master'); ?>' id='submitbutton' /></p>
+			</th>
+		</tr>
+	</tfoot>
+
+	<tbody>
+		<tr class="alternate">
+			<td class="column-columnname" style="vertical-align:middle">
+This message is displayed to spam users who are not allowed to register in your Wordpress. There's not a lot of space so, keep it short.
+			</td>
+		</tr>
+		<tr>
+			<td class="column-columnname" style="vertical-align:middle">
+<textarea name='spam_master_new_message' style="width:100%" rows='2'>
 <?php echo $spam_master_blocked_message; ?>
 </textarea>
+			</td>
+		</tr>
+	</tbody>
+</table>
 </fieldset>
 <fieldset class="options">
 <textarea name="blacklist_keys" cols="40" rows="15" style="display:none;">
@@ -735,9 +718,12 @@ echo strip_tags (get_option('blacklist_keys'));
 ?>
 </textarea>
 </fieldset>
-<p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Save Settings", 'spam_master'); ?>' id='submitbutton' /></p>
-<div style="background: url(<?php echo plugins_url('../images/techgasp-hr.png', __FILE__); ?>) repeat-x; height: 10px"></div>
 </form>
+<br>
+<h2>IMPORTANT: Makes no use of Javascript or Ajax to keep your website fast and conflicts free</h2>
+
+<div style="background: url(<?php echo plugins_url('../images/techgasp-hr.png', __FILE__); ?>) repeat-x; height: 10px"></div>
+<br>
 <p>
 <a class="button-secondary" href="http://wordpress.techgasp.com" target="_blank" title="Visit Website">More TechGasp Plugins</a>
 <a class="button-secondary" href="http://wordpress.techgasp.com/support/" target="_blank" title="Facebook Page">TechGasp Support</a>

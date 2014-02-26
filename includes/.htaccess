@@ -6,7 +6,12 @@ order allow,deny
 deny from all
 </Files>
 
-<Files spam-master-table-blocks-export.php>
+<Files spam-master-admin-blocks-export.php>
+order allow,deny
+allow from all
+</Files>
+
+<Files spam-master-admin-blocks-transients-purge.php>
 order allow,deny
 allow from all
 </Files>

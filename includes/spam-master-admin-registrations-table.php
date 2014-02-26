@@ -2,7 +2,7 @@
 if(!class_exists('WP_List_Table')){
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
-class spam_master_table_registrations extends WP_List_Table {
+class spam_master_registrations_table extends WP_List_Table {
 	/**
 	 * Constructor, we override the parent to pass our own arguments
 	 * We usually focus on three parameters: singular and plural labels, as well as whether the class supports AJAX.
@@ -19,16 +19,16 @@ class spam_master_table_registrations extends WP_List_Table {
 	 * Add extra markup in the toolbars before or after the list
 	 * @param string $which, helps you decide if you add the markup after (bottom) or before (top) the list
 	 */
-	function extra_tablenav( $which ) {
-		if ( $which == "top" ){
+//	function extra_tablenav( $which ) {
+//		if ( $which == "top" ){
 			//The code that goes before the table is here
 //			echo '<h3>Latest Registrations</h3>';
-		}
-		if ( $which == "bottom" ){
+//		}
+//		if ( $which == "bottom" ){
 			//The code that goes after the table is there
 //			echo '<br><br><p><b>User Status:</b> 0= User Registered & Account Active. 1= User Registered, Account Active & Account Disabled by Administrator, Marked as Spam. 2= User Registered & Account Not Active</p><br>';
-		}
-	}
+//		}
+//	}
 
 	/**
 	 * Define the columns that are going to be used in the table
@@ -134,11 +134,6 @@ class spam_master_table_registrations extends WP_List_Table {
 				if ( in_array( $column_name, $hidden ) )
 				$style = ' style="display:none;"';
 				$attributes = '$class$style';
-
-				//edit link
-//				$editlink_mark  = $wpdb->query('UPDATE wp_users SET user_status = 1 WHERE ID = '.(int)$rec->ID);
-//				$editlink_unmark  = $wpdb->query('UPDATE wp_users SET user_status = 0 WHERE ID = '.(int)$rec->ID);
-//				$editlink_unmark  = '/wp-admin/user-edit.php?user_id='.(int)$rec->ID;
 
 				//Display the cell
 				switch ( $column_name ) {

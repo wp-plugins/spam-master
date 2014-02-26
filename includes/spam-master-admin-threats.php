@@ -27,9 +27,6 @@
 		add_action( 'admin_menu', 'menu_thr_single' );
 		}
 
-		function spam_master_threats(){
-
-require_once( dirname( __FILE__ ) . '/spam-master-table-threats.php');
-
+function spam_master_threats(){
+require_once( dirname( __FILE__ ) . '/spam-master-admin-threats-table.php');
 }
-?>

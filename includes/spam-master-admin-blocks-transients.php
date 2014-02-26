@@ -20,7 +20,6 @@ add_action( 'init', 'spam_master_purge_transients' );
                 $wpdb->query($sql);
 
                 // delete orphaned transient expirations,
-                // and clean up any "third wheel" rows left lying around by NextGEN Gallery 2.0.x
                 $sql = "
                         delete from {$wpdb->options}
                         where (
