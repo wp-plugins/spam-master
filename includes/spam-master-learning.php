@@ -129,7 +129,7 @@ update_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spa
 /////////////////
 //IF MULTI-SITE
 if( is_multisite() ) {
-if ( get_site_option('spam_master_selected') == 'Full Protection' ){
+if ( get_site_option('spam_master_selected') == 'FULL PROTECTION' ){
 	if ( get_site_option('spam_master_response_key') == 200 ){
 global $wpdb;
 //url to post
@@ -146,7 +146,7 @@ $blog = get_site_option('blogname');
 $admin_email = get_site_option('admin_email');
 $web_adress = get_site_url();
 $total_users = $result_count;
-$spam_master_version = get_site_option('spam_master_version');
+$spam_master_version = get_site_option('spam_master_installed_version');
 $spam_master_protection = get_site_option('spam_master_selected');
 $registered_email = $result_email;
 $registered_ip = $result_ip;
@@ -190,7 +190,7 @@ else{
 }
 //IF SINGLE-SITE
 else{
-if ( get_option('spam_master_selected') == 'Full Protection' ){
+if ( get_option('spam_master_selected') == 'FULL PROTECTION' ){
 	if ( get_option('spam_master_response_key') == 200 ){
 global $wpdb;
 //url to post
@@ -207,7 +207,7 @@ $blog = get_option('blogname');
 $admin_email = get_option('admin_email');
 $web_adress = get_site_url();
 $total_users = $result_count;
-$spam_master_version = get_option('spam_master_version');
+$spam_master_version = get_option('spam_master_installed_version');
 $spam_master_protection = get_option('spam_master_selected');
 $registered_email = $result_email;
 $registered_ip = $result_ip;

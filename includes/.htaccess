@@ -11,10 +11,5 @@ order allow,deny
 allow from all
 </Files>
 
-<Files spam-master-admin-blocks-transients-purge.php>
-order allow,deny
-allow from all
-</Files>
-
 order deny,allow
 deny from all
