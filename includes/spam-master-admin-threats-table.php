@@ -237,7 +237,7 @@ else {
 <div class="description">These are your personal keys, they get combined with the RBL Protection List keys. Add or delete as many domains, words, emails or Ip's as you want. <b>Column is Editable.</b></div>
 <br>
 <div class="description"><b>My WhiteList:</b></div>
-<div class="description">Used to override domains, words, emails or Ip's automatically set by the automatic RBL Protection List. The overriding domain, word, email or Ip needs to be written in exactly the same way as it shows in the RBL Protection List. <b>Column is Editable.</b></div>
+<div class="description">Used to override domains, words, emails or Ip's automatically set by the RBL Protection List. The overriding domain, word, email or Ip needs to be written in exactly the same way as it shows in the RBL Protection List. <b>Column is Editable.</b></div>
 <br>
 <div class="description">Remember to always press <b>Save List</b> to apply your changes.</div>
 <br>
