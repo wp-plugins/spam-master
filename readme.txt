@@ -62,7 +62,7 @@ Very few plugins will actually show the statistics we packed into spam master. S
 1. Use the Wordpress Installer, Updater.
 2. Activate in the "Plugins" admin panel.
 3. Visit the "Plugin Page Menu | Spam Master" to configure settings.
-4. [Spam Master Documentation](http://wordpress.techgasp.com/spam-master-documentation/
+4. [Spam Master Documentation](http://wordpress.techgasp.com/spam-master-documentation/)
 
 
 == Frequently Asked Questions ==
