@@ -2,7 +2,7 @@
 if(!class_exists('WP_List_Table')){
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
-class spam_master_blocks_table extends WP_List_Table {
+class spam_master_comments_table extends WP_List_Table {
 	/**
 	 * Constructor, we override the parent to pass our own arguments
 	 * We usually focus on three parameters: singular and plural labels, as well as whether the class supports AJAX.
@@ -35,7 +35,12 @@ class spam_master_blocks_table extends WP_List_Table {
 	 */
 	function get_columns() {
 		return $columns= array(
-			'col_blocks'	=>__('Date & Registration Email'),
+			'col_blocks_date'		=>__('Date'),
+			'col_blocks_author'		=>__('Author'),
+			'col_blocks_email'		=>__('Email'),
+			'col_blocks_website'	=>__('Website'),
+			'col_blocks_comment'	=>__('Comment'),
+			'col_blocks_status'		=>__('Status'),
 		);
 	}
 
@@ -45,7 +50,12 @@ class spam_master_blocks_table extends WP_List_Table {
 	 */
 		function get_sortable_columns() {
 		return $sortable = array(
-			'col_blocks'	=>	array('option_value',false)
+			'col_blocks_date'		=>	array('comment_date',false),
+			'col_blocks_author'		=>	array('comment_author',false),
+			'col_blocks_email'		=>	array('comment_author_email',false),
+			'col_blocks_website'	=>	array('comment_author_url',false),
+			'col_blocks_comment'	=>	array('comment_content',false),
+			'col_blocks_status'		=>	array('comment_approved',false),
 		);
 	}
 
@@ -57,11 +67,11 @@ class spam_master_blocks_table extends WP_List_Table {
 		$screen = get_current_screen();
 
 		/* -- Preparing your query -- */
-	    $query = "SELECT option_value FROM $wpdb->options WHERE option_name LIKE '_transient_spam_master_invalid_email%'";
+	    $query = "SELECT * FROM $wpdb->comments WHERE comment_approved='0' OR comment_approved='1' OR comment_approved='spam' OR comment_approved='trash'";
 
 		/* -- Ordering parameters -- */
 	    //Parameters that are going to be used to order the result
-	    $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'option_value';
+	    $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'comment_ID';
 	    $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : 'DESC';
 	    if(!empty($orderby) & !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
 
@@ -118,7 +128,7 @@ class spam_master_blocks_table extends WP_List_Table {
 			//Open the line
 			static $row_class = '';
 			$row_class = ( $row_class == '' ? ' class="alternate"' : '' );
-			echo '<tr '.$row_class.' id="record_'.$rec->option_value.'">';
+			echo '<tr '.$row_class.' id="record_'.$rec->comment_approved.'">';
 			foreach ( $columns as $column_name => $column_display_name ) {
 
 				//Style attributes for each col
@@ -127,6 +137,7 @@ class spam_master_blocks_table extends WP_List_Table {
 				if ( in_array( $column_name, $hidden ) )
 				$style = ' style="display:none;"';
 				$attributes = '$class$style';
+				$length = 28;
 
 				//edit link
 //				$editlink_mark  = $wpdb->query('UPDATE wp_users SET user_status = 1 WHERE ID = '.(int)$rec->ID);
@@ -136,7 +147,43 @@ class spam_master_blocks_table extends WP_List_Table {
 				//Display the cell
 
 				switch ( $column_name ) {
-					case "col_blocks":	echo '<td '.$attributes.'>'.stripslashes($rec->option_value).'</td>';break;
+					case "col_blocks_date":	echo '<td '.$attributes.'>'.stripslashes($rec->comment_date).'</td>';break;
+					case "col_blocks_author":	if ( strlen($rec->comment_author) > $length ) {
+													$rec->comment_author = substr($rec->comment_author,0,$length);
+													$rec->comment_author = $rec->comment_author .' ...';
+												}
+												echo '<td '.$attributes.'>'.stripslashes($rec->comment_author).'</td>';break;
+					case "col_blocks_email":	if ( strlen($rec->comment_author_email) > $length ) {
+													$rec->comment_author_email = substr($rec->comment_author_email,0,$length);
+													$rec->comment_author_email = $rec->comment_author_email .' ...';
+												}
+												echo '<td '.$attributes.'>'.stripslashes($rec->comment_author_email).'</td>';break;
+					case "col_blocks_website":	if ( strlen($rec->comment_author_url) > $length ) {
+													$rec->comment_author_url = substr($rec->comment_author_url,0,$length);
+													$rec->comment_author_url = $rec->comment_author_url .' ...';
+												}
+												echo '<td '.$attributes.'>'.stripslashes($rec->comment_author_url).'</td>';break;
+					case "col_blocks_comment":	if ( strlen($rec->comment_content) > $length ) {
+													$rec->comment_content = substr($rec->comment_content,0,$length);
+													$rec->comment_content = $rec->comment_content .' ...';
+												}
+												echo '<td '.$attributes.'>'.stripslashes($rec->comment_content).'</td>';break;
+					case "col_blocks_status":	if ($rec->comment_approved == '0'){
+												$rec->comment_approved = '<font color="white"><strong>Pending</strong></font>';
+												echo '<td '.$attributes.' bgcolor="#F2AE41">'.stripslashes($rec->comment_approved).'</td>';break;
+												}
+												if ($rec->comment_approved == '1'){
+												$rec->comment_approved = '<font color="white"><strong>Approved</strong></font>';
+												echo '<td '.$attributes.' bgcolor="#078BB3">'.stripslashes($rec->comment_approved).'</td>';break;
+												}
+												if ($rec->comment_approved == 'spam'){
+												$rec->comment_approved = '<font color="white"><strong>Success Blocked</strong></font>';
+												echo '<td '.$attributes.' bgcolor="#07B35">'.stripslashes($rec->comment_approved).'</td>';break;
+												}
+												if ($rec->comment_approved == 'trash'){
+												$rec->comment_approved = '<font color="white"><strong>Trashed</strong></font>';
+												echo '<td '.$attributes.' bgcolor="#525051">'.stripslashes($rec->comment_approved).'</td>';break;
+												}
 				}
 			}
 

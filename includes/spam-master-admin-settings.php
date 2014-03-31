@@ -52,7 +52,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		$blacklist_current = trim($blacklist_array[$i]);
 		if(stripos($user_email, $blacklist_current) !== false)
 		{
-		$errors->add('invalid_email', '<strong>SPAM MASTER</strong>'.__( get_option('spam_master_message') ))& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), current_time( 'mysql' )." - ".$user_email, 604800 );
+		$errors->add('invalid_email', '<strong>SPAM MASTER</strong>'.__( get_option('spam_master_message') ))& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
 		$count = $errors;
 		add_option( 'spam_master_block_count', $count );
 		$count = mysql_query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
@@ -75,7 +75,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		for($i = 0; $i < $blacklist_size; $i++) {
 		$blacklist_current = trim($blacklist_array[$i]);
 		if(stripos($data, $blacklist_current) !== false) {
-		$result['errors']->add('invalid_email', '<strong>SPAM MASTER</strong>'. __( get_site_option( 'spam_master_message') ))& set_site_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), current_time( 'mysql' )." - ".$result['user_email'], 604800 );
+		$result['errors']->add('invalid_email', '<strong>SPAM MASTER</strong>'. __( get_site_option( 'spam_master_message') ))& set_site_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
 		$count = $result;
 		add_site_option( 'spam_master_block_count', $count );
 		$count = mysql_query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
@@ -91,7 +91,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 			function spam_master_buddypress_register( $result ) {
 			global $wpdb;
 			if ( spam_master_buddypress_spammail( $result['user_email'] ) )
-			$result['errors']->add('user_email', '<strong>SPAM MASTER</strong>'. __( get_option('spam_master_message') ) )& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), current_time( 'mysql' )." - ".$result['user_email'], 604800 );
+			$result['errors']->add('user_email', '<strong>SPAM MASTER</strong>'. __( get_option('spam_master_message') ) )& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
 			$count = $result;
 			add_option( 'spam_master_block_count', $count );
 			$count = mysql_query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
@@ -429,17 +429,14 @@ add_site_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
 		update_site_option('spam_master_full_rbl_status', $full_rbl_status);
-		$medium_rbl_color = "525051";
-		update_site_option('spam_master_medium_rbl_color', $medium_rbl_color);
-		$medium_rbl_status = "Disconnected";
-		update_site_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "525051";
 		update_site_option('spam_master_learning_color', $learning_color);
 		$learning_status = "OFFLINE";
 		update_site_option('spam_master_learning_status', $learning_status);
 //
-		$blacklist_keys = get_site_option( 'blacklist_keys' );
+//		$blacklist_keys = get_site_option( 'blacklist_keys' );
 		update_site_option('spam_master_rbl_keys', get_site_option('spam_master_free_keys'));
+		update_site_option('blacklist_keys', get_site_option('spam_master_free_keys'));
 //
 		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
@@ -458,17 +455,14 @@ add_site_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
 		update_site_option('spam_master_full_rbl_status', $full_rbl_status);
-		$medium_rbl_color = "525051";
-		update_site_option('spam_master_medium_rbl_color', $medium_rbl_color);
-		$medium_rbl_status = "Disconnected";
-		update_site_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "525051";
 		update_site_option('spam_master_learning_color', $learning_color);
 		$learning_status = "OFFLINE";
 		update_site_option('spam_master_learning_status', $learning_status);
 //
-		$blacklist_keys = get_site_option( 'blacklist_keys' );
+//		$blacklist_keys = get_site_option( 'blacklist_keys' );
 		update_site_option('spam_master_rbl_keys', get_site_option('spam_master_free_keys'));
+		update_site_option('blacklist_keys', get_site_option('spam_master_free_keys'));
 //
 		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
@@ -491,10 +485,6 @@ update_site_option('spam_master_protection', $trd_full);
 		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Optimal Connection";
 		update_site_option('spam_master_full_rbl_status', $full_rbl_status);
-		$medium_rbl_color = "07B357";
-		update_site_option('spam_master_medium_rbl_color', $medium_rbl_color);
-		$medium_rbl_status = "Optimal Connection";
-		update_site_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "07B357";
 		update_site_option('spam_master_learning_color', $learning_color);
 		$learning_status = "ONLINE";
@@ -507,8 +497,9 @@ update_site_option('spam_master_protection', $trd_full);
 		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(ID) FROM $wpdb->users");
 		update_site_option('spam_master_user_registrations', $spam_master_user_registrations);
 //
-		$blacklist_keys = get_site_option( 'blacklist_keys' );
+//		$blacklist_keys = get_site_option( 'blacklist_keys' );
 		update_site_option('spam_master_rbl_keys', get_site_option('spam_master_full_keys'));
+		update_site_option('blacklist_keys', get_site_option('spam_master_full_keys'));
 //
 	}
 	else {
@@ -520,15 +511,11 @@ update_site_option('spam_master_protection', $trd_full);
 		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
 		update_site_option('spam_master_full_rbl_status', $full_rbl_status);
-		$medium_rbl_color = "525051";
-		update_site_option('spam_master_medium_rbl_color', $medium_rbl_color);
-		$medium_rbl_status = "Disconnected";
-		update_site_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "F2AE41";
 		update_site_option('spam_master_learning_color', $learning_color);
-		$learning_status = "No License, Learning OFFLINE";
+		$learning_status = "No License, Select FREE PROTECTION in Settings Page";
 		update_site_option('spam_master_learning_status', $learning_status);
-		$protection_total = "No License, 4 RBL FREE";
+		$protection_total = "No License. Select FREE PROTECTION in Settings Page";
 		update_site_option('spam_master_protection_total', $protection_total);
 		$protection_number_color = "F2AE41";
 		update_site_option('spam_master_protection_number_color', $protection_number_color);
@@ -536,8 +523,9 @@ update_site_option('spam_master_protection', $trd_full);
 		update_site_option('spam_master_user_registrations', $spam_master_user_registrations);
 		$trd_light = false;
 //
-		$blacklist_keys = get_site_option( 'blacklist_keys' );
+//		$blacklist_keys = get_site_option( 'blacklist_keys' );
 		update_site_option('spam_master_rbl_keys', get_site_option('spam_master_free_keys'));
+		update_site_option('blacklist_keys', get_site_option('spam_master_free_keys'));
 //
 	}
 }
@@ -551,23 +539,20 @@ add_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 	if ( get_option('spam_master_response_key') == 200 ){
 		$license_color = "F2AE41";
 		update_option('spam_master_license_color', $license_color);
-		$license_status = "FREE PROTECTION 4 THREATS";
+		$license_status = "FREE PROTECTION 4 THREATS. License Valid, select FULL PROTECTION.";
 		update_option('spam_master_license_status', $license_status);
 		$full_rbl_color = "525051";
 		update_option('spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
 		update_option('spam_master_full_rbl_status', $full_rbl_status);
-		$medium_rbl_color = "525051";
-		update_option('spam_master_medium_rbl_color', $medium_rbl_color);
-		$medium_rbl_status = "Disconnected";
-		update_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "525051";
 		update_option('spam_master_learning_color', $learning_color);
 		$learning_status = "OFFLINE";
 		update_option('spam_master_learning_status', $learning_status);
 //
-		$blacklist_keys = get_option( 'blacklist_keys' );
+//		$blacklist_keys = get_option( 'blacklist_keys' );
 		update_option('spam_master_rbl_keys', get_option('spam_master_free_keys'));
+		update_option('blacklist_keys', get_site_option('spam_master_free_keys'));
 //
 		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
@@ -586,17 +571,14 @@ add_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 		update_option('spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
 		update_option('spam_master_full_rbl_status', $full_rbl_status);
-		$medium_rbl_color = "525051";
-		update_option('spam_master_medium_rbl_color', $medium_rbl_color);
-		$medium_rbl_status = "Disconnected";
-		update_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "525051";
 		update_option('spam_master_learning_color', $learning_color);
 		$learning_status = "OFFLINE";
 		update_option('spam_master_learning_status', $learning_status);
 //
-		$blacklist_keys = get_option( 'blacklist_keys' );
+//		$blacklist_keys = get_option( 'blacklist_keys' );
 		update_option('spam_master_rbl_keys', get_option('spam_master_free_keys'));
+		update_site_option('blacklist_keys', get_site_option('spam_master_free_keys'));
 //
 		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
@@ -619,10 +601,6 @@ update_option('spam_master_protection', $trd_full);
 		update_option('spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Optimal Connection";
 		update_option('spam_master_full_rbl_status', $full_rbl_status);
-		$medium_rbl_color = "07B357";
-		update_option('spam_master_medium_rbl_color', $medium_rbl_color);
-		$medium_rbl_status = "Optimal Connection";
-		update_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "07B357";
 		update_option('spam_master_learning_color', $learning_color);
 		$learning_status = "ONLINE";
@@ -630,8 +608,9 @@ update_option('spam_master_protection', $trd_full);
 		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(ID) FROM $wpdb->users");
 		update_option('spam_master_user_registrations', $spam_master_user_registrations);
 //
-		$blacklist_keys = get_option( 'blacklist_keys' );
+//		$blacklist_keys = get_option( 'blacklist_keys' );
 		update_option('spam_master_rbl_keys', get_option('spam_master_full_keys'));
+		update_option('blacklist_keys', get_site_option('spam_master_full_keys'));
 //
 		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
@@ -648,10 +627,6 @@ update_option('spam_master_protection', $trd_full);
 		update_option('spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
 		update_option('spam_master_full_rbl_status', $full_rbl_status);
-		$medium_rbl_color = "525051";
-		update_option('spam_master_medium_rbl_color', $medium_rbl_color);
-		$medium_rbl_status = "Disconnected";
-		update_option('spam_master_medium_rbl_status', $medium_rbl_status);
 		$learning_color = "F2AE41";
 		update_option('spam_master_learning_color', $learning_color);
 		$learning_status = "No License, Learning OFFLINE";
@@ -665,8 +640,9 @@ update_option('spam_master_protection', $trd_full);
 		$trd_light = false;
 		echo '<div id="message" class="error"><p><b>WARNING</b>... Full Protection Selected without Valid License Key.</p></div><br><div id="message" class="error"><p><b>1.</b> If you inserted a valid license key, please wait for license activation. The warning will disapear upon license activation.</p></div><br><div id="message" class="error"><p><b>2.</b> If you do not have a licence key, please select Free Protection and click Save & Refresh.</p></div>';
 //
-		$blacklist_keys = get_option( 'blacklist_keys' );
+//		$blacklist_keys = get_option( 'blacklist_keys' );
 		update_option('spam_master_rbl_keys', get_option('spam_master_free_keys'));
+		update_option('blacklist_keys', get_site_option('spam_master_free_keys'));
 //
 	}
 }

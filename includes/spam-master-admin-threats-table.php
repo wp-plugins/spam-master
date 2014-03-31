@@ -246,7 +246,7 @@ else {
 </tr>
 </table>
 </fieldset>
-<p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Save List, Refresh & Sort", 'spam_master'); ?>' id='submitbutton' /></p>
+<p class="submit" style="margin:0px; padding:0px; height:30px;"><input class='button-primary' type='submit' name='update' value='<?php _e("Save List, Refresh & Sort", 'spam_master'); ?>' id='submitbutton' /></p>
 </form>
 <br>
 <h2>IMPORTANT: Makes no use of Javascript or Ajax to keep your website fast and conflicts free</h2>

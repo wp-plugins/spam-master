@@ -2,7 +2,7 @@
 if(!class_exists('WP_List_Table')){
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
-class spam_master_registrations_table extends WP_List_Table {
+class spam_master_registrations_table_blocked extends WP_List_Table {
 	/**
 	 * Constructor, we override the parent to pass our own arguments
 	 * We usually focus on three parameters: singular and plural labels, as well as whether the class supports AJAX.
@@ -14,7 +14,6 @@ class spam_master_registrations_table extends WP_List_Table {
 		'ajax'	=> false //We won't support Ajax for this table
 		) );
 	 }
-
 	/**
 	 * Add extra markup in the toolbars before or after the list
 	 * @param string $which, helps you decide if you add the markup after (bottom) or before (top) the list
@@ -36,11 +35,7 @@ class spam_master_registrations_table extends WP_List_Table {
 	 */
 	function get_columns() {
 		return $columns= array(
-			'col_user_registered'	=>__('Registration Date'),
-			'col_user_id'			=>__('User ID'),
-			'col_user_name'			=>__('Name'),
-			'col_user_email'		=>__('User Email'),
-			'col_user_status'		=>__('User Status')
+			'col_blocks'	=>__('Date & Registration Email. This list contains up to a week of data. Older data is automatically purged to keep your <b>database "slim"</b> and your website with <b>fast page load times</b>.'),
 		);
 	}
 
@@ -50,9 +45,7 @@ class spam_master_registrations_table extends WP_List_Table {
 	 */
 		function get_sortable_columns() {
 		return $sortable = array(
-			'col_user_registered'	=>	array('user_registered',false),
-			'col_user_id'			=>	array('ID',false),
-			'col_user_status'		=>	array('user_status',false)
+			'col_blocks'	=>	array('option_value',false)
 		);
 	}
 
@@ -64,11 +57,11 @@ class spam_master_registrations_table extends WP_List_Table {
 		$screen = get_current_screen();
 
 		/* -- Preparing your query -- */
-	    $query = "SELECT * FROM $wpdb->users";
+	    $query = "SELECT option_value FROM $wpdb->options WHERE option_name LIKE '_transient_spam_master_invalid_email%'";
 
 		/* -- Ordering parameters -- */
 	    //Parameters that are going to be used to order the result
-	    $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'user_registered';
+	    $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'option_value';
 	    $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : 'DESC';
 	    if(!empty($orderby) & !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
 
@@ -125,7 +118,7 @@ class spam_master_registrations_table extends WP_List_Table {
 			//Open the line
 			static $row_class = '';
 			$row_class = ( $row_class == '' ? ' class="alternate"' : '' );
-			echo '<tr '.$row_class.' id="record_'.$rec->ID.'">';
+			echo '<tr '.$row_class.' id="record_'.$rec->option_value.'">';
 			foreach ( $columns as $column_name => $column_display_name ) {
 
 				//Style attributes for each col
@@ -135,24 +128,15 @@ class spam_master_registrations_table extends WP_List_Table {
 				$style = ' style="display:none;"';
 				$attributes = '$class$style';
 
+				//edit link
+//				$editlink_mark  = $wpdb->query('UPDATE wp_users SET user_status = 1 WHERE ID = '.(int)$rec->ID);
+//				$editlink_unmark  = $wpdb->query('UPDATE wp_users SET user_status = 0 WHERE ID = '.(int)$rec->ID);
+//				$editlink_unmark  = '/wp-admin/user-edit.php?user_id='.(int)$rec->ID;
+
 				//Display the cell
+
 				switch ( $column_name ) {
-					case "col_user_registered":	echo '<td '.$attributes.'>'.stripslashes($rec->user_registered).'</td>';break;
-					case "col_user_id": echo '<td '.$attributes.'>'.stripslashes($rec->ID).'</td>'; break;
-					case "col_user_name": echo '<td '.$attributes.'>'.$rec->display_name.'</td>'; break;
-					case "col_user_email": echo '<td '.$attributes.'>'.$rec->user_email.'</td>'; break;
-					case "col_user_status":	if ($rec->user_status == '0'){
-												$rec->user_status = '<font color="white"><strong>Registered & Account Active</strong></font>';
-												echo '<td '.$attributes.' bgcolor="#07B35">'.stripslashes($rec->user_status).'</td>';break;
-												}
-												if ($rec->user_status == '1'){
-												$rec->user_status = '<font color="white"><strong>Registered, Active & Marked as Spam</strong></font>';
-												echo '<td '.$attributes.' bgcolor="#525051">'.stripslashes($rec->user_status).'</td>';break;
-												}
-												if ($rec->user_status == '2'){
-												$rec->user_status = '<font color="white"><strong>Registered & Account Not Active</strong></font>';
-												echo '<td '.$attributes.' bgcolor="#078BB3">'.stripslashes($rec->user_status).'</td>';break;
-												}
+					case "col_blocks":	echo '<td '.$attributes.'>'.stripslashes($rec->option_value).'</td>';break;
 				}
 			}
 

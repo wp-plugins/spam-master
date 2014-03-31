@@ -3,7 +3,7 @@ Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 4.3.1
+Stable tag: 4.3.5
 License: GPLv2 or later
 
 Spam Master is the Ultimate Spam Protection plugin that blocks new user registrations and post comments with Real Time anti-spam lists.
@@ -19,7 +19,7 @@ The problem facing spam targeted wordpress blogs is that most of the spam regist
 
 The plugin comes packed with automated Spam Learning function that will make your wordpress blog a fighting spam enforcer by providing registration ip's and emails for analysis and spam lists inclusion.
 
-Very few plugins will actually show the statistics we packed into spam master. Selected Protection Level, Total Website Users, Total Spam Blocked, Total Number of Threats you are Protected from, Spam Learning, Status of RBL Spam Servers, and User Registrations List with (user id, registration date, user status, name, username, and email).
+Very few plugins will actually show the statistics we packed into spam master. Selected Protection Level, Total Website Users, Total Spam Users Blocked, Total Number of Comments, Total Number of Spam Blocked Comments, Total Number of Approved Comments, Total Number of Pending Comments, Total Number of Trashed Comments, Total Number of Threats you are Protected from, Spam Learning, Status of RBL Spam Servers, User Registrations List with (user id, registration date, user status, name, username, and email) and Comments List with (comment date, comment author, author email, author website, comment content, comment status).
 
 **IMPORTANT: Free Protection Version only protects you from hotmail, msn, live and outlook spam. Full Protection Version requires paid RBL license to work and protects you from thousands of spam sources [Full Protection License Link](http://wordpress.techgasp.com/spam-master/)**
 
@@ -30,7 +30,7 @@ Very few plugins will actually show the statistics we packed into spam master. S
 **MAIN FEATURES:**
 
 * Protects Wordpress from User Registrations (spamming bots, users or both)
-* Also protects Wordpress Comments
+* Protects Wordpress Comments from (spamming bots, users or both)
 * Spam Master marks as spam comments wrongly cleared as safe by akismet, check screenshots
 * Spam Master is Buddypress Ready
 * Spam Master checks for emails, domains, ip's and words
@@ -86,8 +86,8 @@ Very few plugins will actually show the statistics we packed into spam master. S
 1. Main Plugin Page with News and Help Buttons
 2. New Plugin Menu
 3. Settings Page
-4. User Registrations Page
-5. Blocked Users Registrations Page
+4. Registrations Page
+5. Comments Page
 6. Protection List Page
 7. Statistics Page
 8. Wordpress Admin Registration, Spam Master in action blocking a user registration. Below, Buddypress Registration, Spam Master in action blocking a user registration
@@ -95,6 +95,21 @@ Very few plugins will actually show the statistics we packed into spam master. S
 
 
 == Changelog ==
+
+= 4.3.5 =
+* Upgrade to beefed-up framework v3.5
+* Registrations page re-design. Now includes Registrations and Blocked Registrations
+* Combined Registrations page and Blocked Registrations page into a single page that shows a detailed overview of all registrations activity
+* New Comments page that combines blocked, approved, pending, trashed comments. Much like the Registrations page it shows a detailed overview of all comments activity
+* Adding Total Comments in Statistics page
+* Adding Blocked Comments in Statistics page
+* Adding Approved Comments in Statistics page
+* Adding Pending Comments in Statistics page
+* Adding Trashed Comments in Statistics page
+* Moving calls from settings to statistics page, will generate statistics a lot faster
+* Learning System to include comments along side registrations
+* Overall code clean
+* Upgrade is mandatory for users with FULL PROTECTION with valid license keys. After upgrade, go to settings page and Save & Refresh your key
 
 = 4.3.1 =
 * Overall code clean
@@ -187,6 +202,9 @@ Very few plugins will actually show the statistics we packed into spam master. S
 
 
 == Upgrade Notice ==
+
+= 4.3.5 =
+* IMPORTANT Upgrade to new TechGasp Plugin Framework v3.5
 
 = 4.3 =
 * IMPORTANT Upgrade to new TechGasp Plugin Framework v3

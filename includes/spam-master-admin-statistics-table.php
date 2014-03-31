@@ -23,7 +23,7 @@ class spam_master_statistics_table extends WP_List_Table {
 	<tbody>
 		<tr class="alternate">
 			<td class="column-columnname" style="vertical-align:middle" width="250">
-Total Users
+<b>Total Users</b>
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
 <font color="white"><b><?php
@@ -42,7 +42,7 @@ echo get_option('spam_master_user_registrations');
 		</tr>
 		<tr class="alternate">
 			<td class="column-columnname" style="vertical-align:middle" width="250">
-Total Blocks
+Total Users Blocked
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3"><font color="white"><b><?php
 if( is_multisite() ) {
@@ -51,7 +51,7 @@ echo get_site_option('spam_master_block_count');
 else{
 echo get_option('spam_master_block_count');
 }
-?></b> Spam Blocks</font>
+?></b> Spam Users Blocked</font>
 			</td>
 		</tr>
 		<tr>
@@ -60,7 +60,101 @@ echo get_option('spam_master_block_count');
 		</tr>
 		<tr class="alternate">
 			<td class="column-columnname" style="vertical-align:middle" width="250">
-Protected Against
+<b>Total Comments</b>
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
+<font color="white"><b><?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_comments_total');
+}
+else{
+echo get_option('spam_master_comments_total');
+}
+?></b> Comments</font>
+			</td>
+		</tr>
+		<tr>
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle"></td>
+		</tr>
+		<tr class="alternate">
+			<td class="column-columnname" style="vertical-align:middle" width="250">
+Total Comments Blocked
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3"><font color="white"><b><?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_comments_total_blocked');
+}
+else{
+echo get_option('spam_master_comments_total_blocked');
+}
+?></b> Spam Comments Blocked</font>
+			</td>
+		</tr>
+		<tr>
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle"></td>
+		</tr>
+		<tr class="alternate">
+			<td class="column-columnname" style="vertical-align:middle" width="250">
+Total Comments Approved
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
+<font color="white"><b><?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_comments_total_approved');
+}
+else{
+echo get_option('spam_master_comments_total_approved');
+}
+?></b> Comments</font>
+			</td>
+		</tr>
+		<tr>
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle"></td>
+		</tr>
+		<tr class="alternate">
+			<td class="column-columnname" style="vertical-align:middle" width="250">
+Total Comments Pending
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
+<font color="white"><b><?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_comments_total_pending');
+}
+else{
+echo get_option('spam_master_comments_total_pending');
+}
+?></b> Comments</font>
+			</td>
+		</tr>
+		<tr>
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle"></td>
+		</tr>
+		<tr class="alternate">
+			<td class="column-columnname" style="vertical-align:middle" width="250">
+Total Comments Trashed
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
+<font color="white"><b><?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_comments_total_trashed');
+}
+else{
+echo get_option('spam_master_comments_total_trashed');
+}
+?></b> Comments</font>
+			</td>
+		</tr>
+		<tr>
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle"></td>
+		</tr>
+		<tr class="alternate">
+			<td class="column-columnname" style="vertical-align:middle" width="250">
+<b>Protected Against</b>
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
 if( is_multisite() ) {
@@ -85,7 +179,7 @@ echo get_option('spam_master_protection_total');
 		</tr>
 		<tr class="alternate">
 			<td class="column-columnname" style="vertical-align:middle" width="250">
-Spam Learning
+<b>Spam Learning</b>
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
 if( is_multisite() ) {
@@ -110,7 +204,7 @@ echo get_option('spam_master_learning_status');
 		</tr>
 		<tr class="alternate">
 			<td class="column-columnname" style="vertical-align:middle" width="250">
-Primary RBL Server Cluster
+<b>Primary RBL Server Cluster</b>
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
 if( is_multisite() ) {
@@ -135,21 +229,21 @@ echo get_option('spam_master_full_rbl_status');
 		</tr>
 		<tr class="alternate">
 			<td class="column-columnname" style="vertical-align:middle" width="250">
-Secondary RBL Server Cluster
+<b>Secondary RBL Server Cluster</b>
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_medium_rbl_color');
+echo get_site_option('spam_master_full_rbl_color');
 }
 else{
-echo get_option('spam_master_medium_rbl_color');
+echo get_option('spam_master_full_rbl_color');
 }
 ?>"><font color="white">Cluster Status: <b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_medium_rbl_status');
+echo get_site_option('spam_master_full_rbl_status');
 }
 else{
-echo get_option('spam_master_medium_rbl_status');
+echo get_option('spam_master_full_rbl_status');
 }
 ?></b></font>
 			</td>

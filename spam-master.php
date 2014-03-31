@@ -2,7 +2,7 @@
 /**
 Plugin Name: Spam Master
 Plugin URI: http://wordpress.techgasp.com/spam-master/
-Version: 4.3.1
+Version: 4.3.5
 Author: TechGasp
 Author URI: http://wordpress.techgasp.com
 Text Domain: spam-master
@@ -28,9 +28,9 @@ if(!class_exists('spam_master')) :
 ///////DEFINE VERSION///////
 define('SPAM_MASTER_ID', 'spam-master');
 ///////DEFINE VERSION///////
-define( 'spam_master_VERSION', '4.3.1' );
+define( 'spam_master_VERSION', '4.3.5' );
 global $spam_master_version, $spam_master_name;
-$spam_master_version = "4.3.1"; //for other pages
+$spam_master_version = "4.3.5"; //for other pages
 $spam_master_name = "Spam Master"; //pretty name
 if( is_multisite() ) {
 update_site_option( 'spam_master_installed_version', $spam_master_version );
@@ -50,7 +50,7 @@ require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-threats.php');
 // HOOK REGISTRATIONS
 require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-registrations.php');
 // HOOK BLOCKS
-require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-blocks.php');
+require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-comments.php');
 // HOOK STATISTICS
 require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-statistics.php');
 // HOOK UPDATER
@@ -109,10 +109,18 @@ update_option( 'spam_master_newest_version', $r->new_version );
 		// Advanced Updater
 
 //END CLASS
+//Updater Label Message
+public static function spam_master_updater_message() {
+$techgasp_updater_info1 = __( 'Important!', 'spam_master' );
+$techgasp_updater_info2 = __( ' Spam Master should be up-to-date for maximum protection.', 'spam_master' );
+$techgasp_updater_icon = plugins_url('images/techgasp-updater-icon.png', __FILE__);
+echo '<br><div style="width:28px; vertical-align:middle; float:left;"><img src='.$techgasp_updater_icon.'></div><b>'.$techgasp_updater_info1.'</b>'.$techgasp_updater_info2;
+}
 }
 if ( is_admin() ){
 	add_action('admin_init', array('spam_master', 'spam_master_register'));
 	add_action('init', array('spam_master', 'spam_master_updater_version_check'));
+	add_action( 'in_plugin_update_message-' . plugin_basename(__FILE__), array('spam_master', 'spam_master_updater_message' ));
 }
 add_filter('the_content', array('spam_master', 'content_with_quote'));
 add_filter( 'plugin_action_links', array('spam_master', 'spam_master_links'), 10, 2 );

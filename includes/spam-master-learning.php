@@ -138,7 +138,11 @@ $spam_master_learn_post = base64_decode($spam_master_learn);
 $result_ip = $_SERVER['REMOTE_ADDR'];
 $result_email = $wpdb->get_var("SELECT user_email FROM wp_users ORDER BY user_registered DESC LIMIT 1");
 $result_count = $wpdb->get_var("SELECT COUNT(*) FROM wp_users");
-
+$result_comment_count = $wpdb->get_var("SELECT COUNT(*) FROM wp_comments");
+$result_comment_email = $wpdb->get_var("SELECT comment_author_email FROM wp_comments ORDER BY comment_ID DESC LIMIT 1");
+$result_comment_website = $wpdb->get_var("SELECT comment_author_url FROM wp_comments ORDER BY comment_ID DESC LIMIT 1");
+$result_comment_content = $wpdb->get_var("SELECT comment_content FROM wp_comments ORDER BY comment_ID DESC LIMIT 1");
+$result_comment_status = $wpdb->get_var("SELECT comment_approved FROM wp_comments ORDER BY comment_ID DESC LIMIT 1");
 //create array of data to be posted
 $time = current_time('mysql');
 $wordpress = get_bloginfo('version');
@@ -150,6 +154,11 @@ $spam_master_version = get_site_option('spam_master_installed_version');
 $spam_master_protection = get_site_option('spam_master_selected');
 $registered_email = $result_email;
 $registered_ip = $result_ip;
+$comment_total = $result_comment_count;
+$comment_email = $result_comment_email;
+$comment_website = $result_comment_website;
+$comment_content = $result_comment_content;
+$comment_status = $result_comment_status;
 $license = get_site_option('spam_master_license_code');
 $post_data['Time'] = urlencode($time);
 $post_data['License Code'] = urlencode($license);
@@ -162,6 +171,11 @@ $post_data['Spam Master']	= urlencode($spam_master_version);
 $post_data['Protection'] = urlencode($spam_master_protection);
 $post_data['REGISTRATION EMAIL'] = urlencode($registered_email);
 $post_data['REGISTRATION IP'] = urlencode($registered_ip);
+$post_data['TOTAL COMMENTS'] = urlencode($comment_total);
+$post_data['COMMENT EMAIL'] = urlencode($comment_email);
+$post_data['COMMENT WEBSITE'] = urlencode($comment_website);
+$post_data['COMMENT CONTENT'] = urlencode($comment_content);
+$post_data['COMMENT STATUS'] = urlencode($comment_status);
 
 //traverse array and prepare data for posting (key1=value1)
 foreach ( $post_data as $key => $value) {$post_items[] = $key . '=' . $value;}
@@ -199,7 +213,11 @@ $spam_master_learn_post = base64_decode($spam_master_learn);
 $result_ip = $_SERVER['REMOTE_ADDR'];
 $result_email = $wpdb->get_var("SELECT user_email FROM wp_users ORDER BY user_registered DESC LIMIT 1");
 $result_count = $wpdb->get_var("SELECT COUNT(*) FROM wp_users");
-
+$result_comment_count = $wpdb->get_var("SELECT COUNT(*) FROM wp_comments");
+$result_comment_email = $wpdb->get_var("SELECT comment_author_email FROM wp_comments ORDER BY comment_ID DESC LIMIT 1");
+$result_comment_website = $wpdb->get_var("SELECT comment_author_url FROM wp_comments ORDER BY comment_ID DESC LIMIT 1");
+$result_comment_content = $wpdb->get_var("SELECT comment_content FROM wp_comments ORDER BY comment_ID DESC LIMIT 1");
+$result_comment_status = $wpdb->get_var("SELECT comment_approved FROM wp_comments ORDER BY comment_ID DESC LIMIT 1");
 //create array of data to be posted
 $time = current_time('mysql');
 $wordpress = get_bloginfo('version');
@@ -212,6 +230,11 @@ $spam_master_protection = get_option('spam_master_selected');
 $registered_email = $result_email;
 $registered_ip = $result_ip;
 $license = get_option('spam_master_license_code');
+$comment_total = $result_comment_count;
+$comment_email = $result_comment_email;
+$comment_website = $result_comment_website;
+$comment_content = $result_comment_content;
+$comment_status = $result_comment_status;
 $post_data['Time'] = urlencode($time);
 $post_data['License Code'] = urlencode($license);
 $post_data['Wordpress'] = urlencode($wordpress);
@@ -223,6 +246,11 @@ $post_data['Spam Master']	= urlencode($spam_master_version);
 $post_data['Protection'] = urlencode($spam_master_protection);
 $post_data['REGISTRATION EMAIL'] = urlencode($registered_email);
 $post_data['REGISTRATION IP'] = urlencode($registered_ip);
+$post_data['TOTAL COMMENTS'] = urlencode($comment_total);
+$post_data['COMMENT EMAIL'] = urlencode($comment_email);
+$post_data['COMMENT WEBSITE'] = urlencode($comment_website);
+$post_data['COMMENT CONTENT'] = urlencode($comment_content);
+$post_data['COMMENT STATUS'] = urlencode($comment_status);
 
 //traverse array and prepare data for posting (key1=value1)
 foreach ( $post_data as $key => $value) {$post_items[] = $key . '=' . $value;}

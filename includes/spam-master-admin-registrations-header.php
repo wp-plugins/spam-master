@@ -8,7 +8,7 @@ class spam_master_registrations_header extends WP_List_Table {
 <table class="widefat fixed" cellspacing="0">
 	<thead>
 		<tr>
-			<th id="columnname" class="manage-column column-columnname" scope="col"><legend><h3><img src="<?php echo plugins_url('../images/techgasp-minilogo-16.png', __FILE__); ?>" style="float:left; height:16px; vertical-align:middle;" /><?php _e('&nbsp;Registrations', 'spam_master'); ?></h3></legend></th>
+			<th id="columnname" class="manage-column column-columnname" scope="col"><legend><h3><img src="<?php echo plugins_url('../images/techgasp-minilogo-16.png', __FILE__); ?>" style="float:left; height:16px; vertical-align:middle;" /><?php _e('&nbsp;Registrations Approved by Spam Master', 'spam_master'); ?></h3></legend></th>
 		</tr>
 	</thead>
 

@@ -1,4 +1,6 @@
 <?php
+//Delete Transients after  week
+require_once( dirname( __FILE__ ) . '/spam-master-admin-registrations-transients.php');
 		/** function/method
 		* Usage: hooking (registering) the plugin menu
 		* Arg(0): null
@@ -41,12 +43,34 @@
 if(!class_exists('WP_List_Table')){
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
+if(!class_exists('spam_master_registrations_header_blocked')){
+	require_once( dirname( __FILE__ ) . '/spam-master-admin-registrations-header-blocked.php');
+}
+
+if(!class_exists('spam_master_registrations_table_blocked')){
+	require_once( dirname( __FILE__ ) . '/spam-master-admin-registrations-table-blocked.php');
+}
 if(!class_exists('spam_master_registrations_header')){
 	require_once( dirname( __FILE__ ) . '/spam-master-admin-registrations-header.php');
 }
 
 if(!class_exists('spam_master_registrations_table')){
 	require_once( dirname( __FILE__ ) . '/spam-master-admin-registrations-table.php');
+}
+
+//Prepare Table of elements
+$wp_list_table = new spam_master_registrations_header_blocked();
+//Table of elements
+$wp_list_table->display();
+
+//Prepare Table of elements
+$wp_list_table = new spam_master_registrations_table_blocked();
+$wp_list_table->prepare_items();
+//Table of elements
+$wp_list_table->display();
+
+function spam_master_load_export(){
+echo plugins_url( 'spam-master-admin-registrations-export.php', __FILE__);
 }
 
 //Prepare Table of elements
@@ -60,11 +84,7 @@ $wp_list_table->prepare_items();
 //Table of elements
 $wp_list_table->display();
 ?>
-<p><b>User Status:</b></p>
-<p><b>0 User Registered & Account Active.</b></p>
-<p><b>1 User Registered, Account Active & Account Disabled by Administrator, Marked as Spam.</b></p>
-<p><b>2 User Registered & Account Not Active</b></p>
-<p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Refresh Lists", 'spam_master'); ?>' id='submitbutton' /></p>
+<p class="submit" style="margin:0px; padding:0px; height:30px;"><input class='button-primary' type='submit' name='update' value='<?php _e("Refresh Lists", 'spam_master'); ?>' id='submitbutton' /> <a class="button-primary" href="<?php spam_master_load_export() ?>" title="Export List">Export Blocked List</a></p>
 </fieldset>
 </form>
 <br>
