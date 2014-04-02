@@ -21,7 +21,7 @@ The plugin comes packed with automated Spam Learning function that will make you
 
 Very few plugins will actually show the statistics we packed into spam master. Selected Protection Level, Total Website Users, Total Spam Users Blocked, Total Number of Comments, Total Number of Spam Blocked Comments, Total Number of Approved Comments, Total Number of Pending Comments, Total Number of Trashed Comments, Total Number of Threats you are Protected from, Spam Learning, Status of RBL Spam Servers, User Registrations List with (user id, registration date, user status, name, username, and email) and Comments List with (comment date, comment author, author email, author website, comment content, comment status).
 
-**IMPORTANT: Free Protection Version only protects you from hotmail, msn, live and outlook spam. Full Protection Version requires paid RBL license to work and protects you from thousands of spam sources [Full Protection License Link](http://wordpress.techgasp.com/spam-master/)**
+**IMPORTANT: Free Protection Version only protects you from hotmail, msn, live and outlook spam. Full Protection Version requires paid RBL license to work and protects you from thousands of spam sources [Full Protection License Link](http://wordpress.techgasp.com/spam-master/)** 
 
 **Makes no use of Javascript or Ajax to keep your website fast and conflicts free**
 

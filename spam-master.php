@@ -38,7 +38,7 @@ update_site_option( 'spam_master_name', $spam_master_name );
 }
 else{
 update_option( 'spam_master_installed_version', $spam_master_version );
-update_option( 'spam_master_name', $spam_master_name );
+update_option( 'spam_master_name', $spam_master_name ); 
 }
 
 // HOOK ADMIN
