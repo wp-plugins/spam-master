@@ -2,7 +2,7 @@
 Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
-Tested up to: 3.9
+Tested up to: 3.9.1
 Stable tag: 4.3.6.1
 License: GPLv2 or later
 
@@ -47,7 +47,7 @@ Very few plugins will actually show the statistics we packed into spam master. S
 
 **ONLINE DEMO**
 
-* Click Register a try to use outlook email
+* Click Login - Register menu and try outlook, hotmail, live, etc. emails
 * [Demo Link](http://wordpress.techgasp.com/spam-master)
 
 **More High Quality Plugins?**
