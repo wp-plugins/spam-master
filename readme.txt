@@ -2,7 +2,7 @@
 Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
-Tested up to: 3.9.1
+Tested up to: 3.9.2
 Stable tag: 4.3.6.1
 License: GPLv2 or later
 
