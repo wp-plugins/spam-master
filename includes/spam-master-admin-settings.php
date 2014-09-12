@@ -217,110 +217,7 @@ if(!class_exists('WP_List_Table')){
 ?>
 <form method="post" width='1'>
 <fieldset class="options">
-<table class="widefat fixed" cellspacing="0">
-	<thead>
-		<tr>
-			<th id="columnname" class="manage-column column-columnname" scope="col" width="250"><legend><h3><img src="<?php echo plugins_url('../images/techgasp-minilogo-16.png', __FILE__); ?>" style="float:left; height:16px; vertical-align:middle;" /><?php _e('&nbsp;License Status', 'spam_master'); ?></h3></legend></th>
-			<th id="columnname" class="manage-column column-columnname" scope="col" width="250"></th>
-			<th id="columnname" class="manage-column column-columnname" scope="col"></th>
-		</tr>
-	</thead>
 
-	<tfoot>
-		<tr>
-			<th class="manage-column column-columnname" scope="col" width="250">
-<p class="submit" style="margin-top:-10px !important; margin-bottom:-18px !important"><input class='button-primary' type='submit' name='update' value='<?php _e("Save & Refresh", 'spam_master'); ?>' id='submitbutton' /></p>
-			</th>
-			<th class="manage-column column-columnname" scope="col" width="250"></th>
-			<th class="manage-column column-columnname" scope="col"></th>
-		</tr>
-	</tfoot>
-
-	<tbody>
-<?php
-//Display Selected Protection
-$spam_master_free_selected = "FREE PROTECTION";
-$spam_master_full_selected = "FULL PROTECTION";
-$key_lic = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvbGljLnR4dA==";
-$key_code = wp_remote_get(''.base64_decode($key_lic).'');
-$response_key = wp_remote_retrieve_response_code( $key_code );
-if( is_multisite() ) {
-update_site_option('spam_master_response_key', $response_key);
-add_site_option('spam_master_message', ': Email, Domain, or Ip banned from registration.');
-$trd_free = "spam_master_trd_free";
-add_site_option('spam_master_trd_free', $trd_free);
-$trd_full = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
-add_site_option('spam_master_trd_full', $trd_full);
-}
-else{
-update_option('spam_master_response_key', $response_key);
-add_option('spam_master_message', ': Email, Domain, or Ip banned from registration.');
-$trd_free = "spam_master_trd_free";
-add_option('spam_master_trd_free', $trd_free);
-$trd_full = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
-add_option('spam_master_trd_full', $trd_full);
-}
-?>
-		<tr class="alternate">
-			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
-Insert Spam Master License: 
-			</td>
-			<td class="column-columnname" style="vertical-align:middle" width="250"><input id="spam_master_license_code" name="spam_master_license_code" type="text" size="16" value="<?php 
-if( is_multisite() ) {
-echo get_site_option('spam_master_license_code');
-}
-else{
-echo get_option('spam_master_license_code');
-}
-?>">
-			</td>
-			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_license_color');
-}
-else{
-echo get_option('spam_master_license_color');
-}
-?>"><font color="white"><b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_license_status');
-}
-else{
-echo get_option('spam_master_license_status');
-}
-?></b></font>
-			</td>
-		</tr>
-		<tr>
-			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
-<a class="button-secondary" href="http://wordpress.techgasp.com/spam-master/" target="_blank" title="Visit Website">get rbl protection license</a>
-			</td>
-			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
-			<td class="column-columnname" style="vertical-align:middle"></td>
-		</tr>
-
-
-
-<?php
-//HOOK LICENSE
-if( is_multisite() ) {
-if(get_site_option('spam_master_license_code') !== get_site_option('spam_master_license_old_code')){
-require_once( dirname( __FILE__ ) . '/spam-master-license.php');
-}
-else {
-}
-}
-else{
-if(get_option('spam_master_license_code') !== get_option('spam_master_license_old_code')){
-require_once( dirname( __FILE__ ) . '/spam-master-license.php');
-}
-else {
-}
-}
-?>
-	</tbody>
-</table>
-<br>
 <table class="widefat fixed" cellspacing="0">
 	<thead>
 		<tr>
@@ -344,13 +241,34 @@ else {
 <?php
 //Protection List
 if ( $_POST) {
-if ( isset($_POST['spam_master_protection']) )
+if ( isset($_POST['spam_master_protection_selection']) )
 if( is_multisite() ){
-update_site_option('spam_master_protection', $_POST['spam_master_protection'] );
+update_site_option('spam_master_protection_selection', $_POST['spam_master_protection_selection'] );
 }
 else{
-update_option('spam_master_protection', $_POST['spam_master_protection'] );
+update_option('spam_master_protection_selection', $_POST['spam_master_protection_selection'] );
 }
+}
+
+//Display Selected Protection
+$key_lic = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvbGljLnR4dA==";
+$key_code = wp_remote_get(''.base64_decode($key_lic).'');
+$response_key = wp_remote_retrieve_response_code( $key_code );
+if( is_multisite() ) {
+update_site_option('spam_master_response_key', $response_key);
+add_site_option('spam_master_message', ': Email, Domain, or Ip banned from registration.');
+$trd_free = "spam_master_trd_free";
+add_site_option('spam_master_trd_free', $trd_free);
+$trd_full = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
+add_site_option('spam_master_trd_full', $trd_full);
+}
+else{
+update_option('spam_master_response_key', $response_key);
+add_option('spam_master_message', ': Email, Domain, or Ip banned from registration.');
+$trd_free = "spam_master_trd_free";
+add_option('spam_master_trd_free', $trd_free);
+$trd_full = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
+add_option('spam_master_trd_full', $trd_full);
 }
 ?>
 <tr class="alternate">
@@ -358,49 +276,29 @@ update_option('spam_master_protection', $_POST['spam_master_protection'] );
 Select Protection Level:
 			</td>
 			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
-<select id="spam_master_protection" name="spam_master_protection">
+<select id="spam_master_protection_selection" name="spam_master_protection_selection">
 <option>SELECT PROTECTION</option>
-<option value="<?php
-//IF MULTI-SITE
-if( is_multisite() ) {
-echo get_site_option('spam_master_trd_free');
-}
-else{
-echo get_option('spam_master_trd_free');
-}?>" <?php
-//IF MULTI-SITE
-if( is_multisite() ) {
-echo get_site_option('spam_master_protection') == 'spam_master_trd_free' ? 'selected="selected"':'';
-}
-else{
-echo get_option('spam_master_protection') == 'spam_master_trd_free' ? 'selected="selected"':'';
-}
-?>>Free Protection</option>
-<option value="<?php 
-//IF MULTI-SITE
-if( is_multisite() ) {
-echo get_site_option('spam_master_trd_full');
-}
-else{
-echo get_option('spam_master_trd_full'); 
-}?>"<?php 
-//IF MULTI-SITE
-if( is_multisite() ) {
-echo get_site_option('spam_master_protection') == 'aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==' ? 'selected="selected"':'';
-}
-else{
-echo get_option('spam_master_protection') == 'aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==' ? 'selected="selected"':'';
-}
-?>>Full Protection</option>
+<option value="1" <?php echo get_option('spam_master_protection_selection') == 1 ? 'selected="selected"':''; ?>>Free Protection</option>
+<option value="2"<?php echo get_option('spam_master_protection_selection') == 2 ? 'selected="selected"':''; ?>>Full Protection</option>
 </select>
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
 <font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_selected');
+	if(get_site_option('spam_master_protection_selection') == 1 ){
+		echo "FREE PROTECTION";
+	}
+	else {
+		echo "FULL PROTECTION";
+	}
 }
 else{
-echo get_option('spam_master_selected');
+	if(get_option('spam_master_protection_selection') == 1 ){
+		echo "FREE PROTECTION";
+	}
+	else {
+		echo "FULL PROTECTION";
+	}
 }
 ?></b></font>
 			</td>
@@ -416,8 +314,7 @@ echo get_option('spam_master_selected');
 <?php
 //IF MULTI-SITE
 if( is_multisite() ) {
-if (get_site_option( 'spam_master_protection') == get_site_option( 'spam_master_trd_free' )){
-update_site_option('spam_master_selected', $spam_master_free_selected);
+if (get_site_option( 'spam_master_protection_selection') ==  1 ){
 update_site_option('spam_master_protection', $trd_free);
 add_site_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 	if ( get_site_option('spam_master_response_key') == 200 ){
@@ -473,8 +370,7 @@ add_site_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 		update_site_option('spam_master_user_registrations', $spam_master_user_registrations);
 		}
 }
-if (get_site_option( 'spam_master_protection') == get_site_option( 'spam_master_trd_full' )){
-update_site_option('spam_master_selected', $spam_master_full_selected);
+if (get_site_option( 'spam_master_protection_selection') == 2 ){
 update_site_option('spam_master_protection', $trd_full);
 	if ( $response_key == 200 ){
 		$license_color = "07B357";
@@ -532,8 +428,7 @@ update_site_option('spam_master_protection', $trd_full);
 }
 //IF SINGLE-SITE
 else{
-if (get_option( 'spam_master_protection') == get_option( 'spam_master_trd_free' )){
-update_option('spam_master_selected', $spam_master_free_selected);
+if (get_option( 'spam_master_protection_selection') == 1 ){
 update_option('spam_master_protection', $trd_free);
 add_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 	if ( get_option('spam_master_response_key') == 200 ){
@@ -589,8 +484,7 @@ add_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 		update_option('spam_master_user_registrations', $spam_master_user_registrations);
 		}
 }
-if (get_option( 'spam_master_protection') == get_option( 'spam_master_trd_full' )){
-update_option('spam_master_selected', $spam_master_full_selected);
+if (get_option( 'spam_master_protection_selection') == 2 ){
 update_option('spam_master_protection', $trd_full);
 	if ( $response_key == 200 ){
 		$license_color = "07B357";
@@ -645,6 +539,86 @@ update_option('spam_master_protection', $trd_full);
 		update_option('blacklist_keys', get_site_option('spam_master_free_keys'));
 //
 	}
+}
+}
+?>
+	</tbody>
+</table>
+<br>
+<table class="widefat fixed" cellspacing="0">
+	<thead>
+		<tr>
+			<th id="columnname" class="manage-column column-columnname" scope="col" width="250"><legend><h3><img src="<?php echo plugins_url('../images/techgasp-minilogo-16.png', __FILE__); ?>" style="float:left; height:16px; vertical-align:middle;" /><?php _e('&nbsp;License Status', 'spam_master'); ?></h3></legend></th>
+			<th id="columnname" class="manage-column column-columnname" scope="col" width="250"></th>
+			<th id="columnname" class="manage-column column-columnname" scope="col"></th>
+		</tr>
+	</thead>
+
+	<tfoot>
+		<tr>
+			<th class="manage-column column-columnname" scope="col" width="250">
+<p class="submit" style="margin-top:-10px !important; margin-bottom:-18px !important"><input class='button-primary' type='submit' name='update' value='<?php _e("Save & Refresh", 'spam_master'); ?>' id='submitbutton' /></p>
+			</th>
+			<th class="manage-column column-columnname" scope="col" width="250"></th>
+			<th class="manage-column column-columnname" scope="col"></th>
+		</tr>
+	</tfoot>
+
+	<tbody>
+		<tr class="alternate">
+			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
+Insert Spam Master License: 
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" width="250"><input id="spam_master_license_code" name="spam_master_license_code" type="text" size="16" value="<?php 
+if( is_multisite() ) {
+echo get_site_option('spam_master_license_code');
+}
+else{
+echo get_option('spam_master_license_code');
+}
+?>">
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_license_color');
+}
+else{
+echo get_option('spam_master_license_color');
+}
+?>"><font color="white"><b><?php
+if( is_multisite() ) {
+echo get_site_option('spam_master_license_status');
+}
+else{
+echo get_option('spam_master_license_status');
+}
+?></b></font>
+			</td>
+		</tr>
+		<tr>
+			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
+<a class="button-secondary" href="http://wordpress.techgasp.com/spam-master/" target="_blank" title="Visit Website">get rbl protection license</a>
+			</td>
+			<td class="column-columnname" style="vertical-align:middle" width="250"></td>
+			<td class="column-columnname" style="vertical-align:middle"></td>
+		</tr>
+
+
+
+<?php
+//HOOK LICENSE
+if( is_multisite() ) {
+if(get_site_option('spam_master_license_code') !== get_site_option('spam_master_license_old_code')){
+require_once( dirname( __FILE__ ) . '/spam-master-license.php');
+}
+else {
+}
+}
+else{
+if(get_option('spam_master_license_code') !== get_option('spam_master_license_old_code')){
+require_once( dirname( __FILE__ ) . '/spam-master-license.php');
+}
+else {
 }
 }
 ?>
