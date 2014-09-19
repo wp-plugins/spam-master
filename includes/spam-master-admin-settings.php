@@ -37,6 +37,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		// REGISTRATION WITHOUT BUDDYPRESS //
 		/////////////////////////////////////
 		function spam_master($user_login, $user_email, $errors) {
+		global $wpdb;
 		//Check Wordpress for Multisite
 		if( is_multisite() ) { 
 		$spam_master_blacklist = get_site_option('blacklist_keys');
@@ -55,7 +56,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		$errors->add('invalid_email', '<strong>SPAM MASTER</strong>'.__( get_option('spam_master_message') ))& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
 		$count = $errors;
 		add_option( 'spam_master_block_count', $count );
-		$count = mysql_query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
+		$count = $wpdb->query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
 		return;
 		}
 		}
@@ -66,6 +67,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		add_filter('wpmu_validate_user_signup', 'spam_master_email_check', 99);
 		}
 		function spam_master_email_check($result) {
+		global $wpdb;
 		$spam_master_blacklist = get_option('blacklist_keys');
 		$blacklist_string = $spam_master_blacklist;
 		$blacklist_array = explode("\n", $blacklist_string);
@@ -78,7 +80,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		$result['errors']->add('invalid_email', '<strong>SPAM MASTER</strong>'. __( get_site_option( 'spam_master_message') ))& set_site_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
 		$count = $result;
 		add_site_option( 'spam_master_block_count', $count );
-		$count = mysql_query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
+		$count = $wpdb->query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
 			echo '<p class="error">'.get_site_option('spam_master_message').'</p>';
 		}
 		}
@@ -94,7 +96,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 			$result['errors']->add('user_email', '<strong>SPAM MASTER</strong>'. __( get_option('spam_master_message') ) )& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
 			$count = $result;
 			add_option( 'spam_master_block_count', $count );
-			$count = mysql_query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
+			$count = $wpdb->query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
 			return $result;
 		}
 		function spam_master_buddypress_spammail( $user_email ) {

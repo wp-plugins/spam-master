@@ -3,7 +3,7 @@ Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 4.3.6.2
+Stable tag: 4.3.6.3
 License: GPLv2 or later
 
 Spam Master is the Ultimate Spam Protection plugin that blocks new user registrations and post comments with Real Time anti-spam lists.
@@ -95,6 +95,13 @@ Very few plugins will actually show the statistics we packed into spam master. S
 
 
 == Changelog ==
+
+= 4.3.6.3 =
+* Blocking process improved
+* Learning function improved
+* Database checks ready for php 5.5
+* Different database checks taxonomy, improved database check speed
+* IMPORTANT, Older Plugin Versions are required to upgrade to latest 4.3.6.3 for full functionality and spam protection
 
 = 4.3.6.2 =
 * Changed Settings page to reflect Protection Level on first instance
@@ -214,6 +221,9 @@ Very few plugins will actually show the statistics we packed into spam master. S
 
 
 == Upgrade Notice ==
+
+= 4.3.6.3 =
+* IMPORTANT Older Plugin Versions, Upgrade to latest 4.3.6.3 is Mandatory
 
 = 4.3.5 =
 * IMPORTANT Upgrade to new TechGasp Plugin Framework v3.5

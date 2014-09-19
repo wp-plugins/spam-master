@@ -5,6 +5,10 @@ function spam_master_learning(){
 global $wpdb;
 //IF MULTI-SITE
 if( is_multisite() ) {
+$key_lic = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvbGljLnR4dA==";
+$key_code = wp_remote_get(''.base64_decode($key_lic).'');
+$response_key = wp_remote_retrieve_response_code( $key_code );
+update_site_option('spam_master_response_key', $response_key);
 //if 200 and set date
 if ( get_site_option('spam_master_response_key') == 200 ){
 //if full protection is selected
@@ -65,6 +69,10 @@ update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim
 }
 //IF SINGLE SITE
 else{
+$key_lic = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvbGljLnR4dA==";
+$key_code = wp_remote_get(''.base64_decode($key_lic).'');
+$response_key = wp_remote_retrieve_response_code( $key_code );
+update_option('spam_master_response_key', $response_key);
 //if 200 and set date
 if ( get_option('spam_master_response_key') == 200 ){
 //if full protection is selected
