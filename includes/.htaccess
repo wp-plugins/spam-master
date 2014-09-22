@@ -1,0 +1,15 @@
+# Note: Having a .htaccess prevents users from directly
+# accessing the files in your data folder
+
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+<Files spam-master-admin-registrations-export.php>
+order allow,deny
+allow from all
+</Files>
+
+order deny,allow
+deny from all
