@@ -120,10 +120,10 @@ if( is_multisite() ) {
 		$spam_master_array_join_keys_free = explode("\n", $spam_master_string_join_keys);
 		$spam_master_array_join_keys_white_clean = explode("\n", $spam_master_keys_white);
 		//compare full to white and delet duplicates in full
-		$spam_master_array_join_keys_clean = array_diff($spam_master_array_join_keys_free, $spam_master_array_keys_white);
-		$spam_master_array_join_keys_clean = array_map("trim", $spam_master_array_join_keys_clean);
-		sort ($spam_master_array_join_keys_clean);
-		$spam_master_string_join_keys_clean = implode("\n", array_unique($spam_master_array_join_keys_clean));
+		@$spam_master_array_join_keys_clean = array_diff($spam_master_array_join_keys_free, $spam_master_array_keys_white);
+		@$spam_master_array_join_keys_clean = array_map("trim", $spam_master_array_join_keys_clean);
+		@sort ($spam_master_array_join_keys_clean);
+		@$spam_master_string_join_keys_clean = implode("\n", array_unique($spam_master_array_join_keys_clean));
 			if(isset($spam_master_array_keys_white)){
 				update_site_option('spam_master_keys_white', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_keys_white))));
 				update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
@@ -138,10 +138,10 @@ if( is_multisite() ) {
 		$spam_master_array_join_keys_full = explode("\n", $spam_master_string_join_keys);
 		$spam_master_array_join_keys_white_clean = explode("\n", $spam_master_keys_white);
 		//compare full to white and delet duplicates in full
-		$spam_master_array_join_keys_clean = array_diff($spam_master_array_join_keys_full, $spam_master_array_keys_white);
-		$spam_master_array_join_keys_clean = array_map("trim", $spam_master_array_join_keys_clean);
-		sort ($spam_master_array_join_keys_clean);
-		$spam_master_string_join_keys_clean = implode("\n", array_unique($spam_master_array_join_keys_clean));
+		@$spam_master_array_join_keys_clean = array_diff($spam_master_array_join_keys_full, $spam_master_array_keys_white);
+		@$spam_master_array_join_keys_clean = array_map("trim", $spam_master_array_join_keys_clean);
+		@sort ($spam_master_array_join_keys_clean);
+		@$spam_master_string_join_keys_clean = implode("\n", array_unique($spam_master_array_join_keys_clean));
 			if(isset($spam_master_array_keys_white)){
 				update_site_option('spam_master_keys_white', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_keys_white))));
 				update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
@@ -159,10 +159,10 @@ else {
 		$spam_master_array_join_keys_free = explode("\n", $spam_master_string_join_keys);
 		$spam_master_array_join_keys_white_clean = explode("\n", $spam_master_keys_white);
 		//compare full to white and delet duplicates in full
-		$spam_master_array_join_keys_clean = array_diff($spam_master_array_join_keys_free, $spam_master_array_keys_white);
-		$spam_master_array_join_keys_clean = array_map("trim", $spam_master_array_join_keys_clean);
-		sort ($spam_master_array_join_keys_clean);
-		$spam_master_string_join_keys_clean = implode("\n", array_unique($spam_master_array_join_keys_clean));
+		@$spam_master_array_join_keys_clean = array_diff($spam_master_array_join_keys_free, $spam_master_array_keys_white);
+		@$spam_master_array_join_keys_clean = array_map("trim", $spam_master_array_join_keys_clean);
+		@sort ($spam_master_array_join_keys_clean);
+		@$spam_master_string_join_keys_clean = implode("\n", array_unique($spam_master_array_join_keys_clean));
 			if(isset($spam_master_array_keys_white)){
 				update_option('spam_master_keys_white', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_keys_white))));
 				update_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
