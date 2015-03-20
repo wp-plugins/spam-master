@@ -15,12 +15,19 @@ $wp_list_table = new spam_master_threats_header();
 //Table of elements
 $wp_list_table->display_threats();
 
-global $wpdb;
-//$blacklist_keys = get_option( 'blacklist_keys' );
-$spam_master_my_keys = get_option( 'spam_master_my_keys' );
-$spam_master_keys_white = get_option( 'spam_master_keys_white' );
-$spam_master_free_keys = get_option( 'spam_master_free_keys' );
-$spam_master_full_keys = get_option( 'spam_master_full_keys' );
+global $wpdb, $blog_id;
+if (is_multisite()){
+$spam_master_my_keys = get_blog_option($blog_id, 'spam_master_my_keys');
+$spam_master_keys_white = get_blog_option($blog_id, 'spam_master_keys_white');
+$spam_master_free_keys = get_blog_option($blog_id, 'spam_master_free_keys');
+$spam_master_full_keys = get_blog_option($blog_id, 'spam_master_full_keys');
+}
+else{
+$spam_master_my_keys = get_option('spam_master_my_keys');
+$spam_master_keys_white = get_option('spam_master_keys_white');
+$spam_master_free_keys = get_option('spam_master_free_keys');
+$spam_master_full_keys = get_option('spam_master_full_keys');
+}
 
 if (isset($_POST['update'])){
 //MY KEYS
@@ -37,36 +44,35 @@ delete_option('blacklist_keys');
 
 
 //MULTI-SITE
-if( is_multisite() ) {
-
-	if( get_site_option('spam_master_protection') == get_site_option('spam_master_trd_free') ){
+if(is_multisite()){
+	if( get_blog_option($blog_id, 'spam_master_protection') == get_blog_option($blog_id, 'spam_master_trd_free') ){
 		//JOIN & CLEAN PERSONAL KEYS + FREE KEYS TO BLACKLIST
 		$spam_master_array_join_keys = array_merge(explode("\n", $spam_master_free_keys), explode("\n", $spam_master_my_keys));
 		$spam_master_array_join_keys = array_map("trim", $spam_master_array_join_keys);
 		sort ($spam_master_array_join_keys);
 		$spam_master_string_join_keys = implode("\n", array_unique($spam_master_array_join_keys));
 			if(isset($spam_master_string_my_keys)){
-				update_site_option('spam_master_my_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_my_keys))));
-				update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys))));
+				update_blog_option($blog_id, 'spam_master_my_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_my_keys))));
+				update_blog_option($blog_id, 'blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys))));
 			}
 			else{
-			update_site_option('spam_master_my_keys', '');
-			update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys))));
+			update_blog_option($blog_id, 'spam_master_my_keys', '');
+			update_blog_option($blog_id, 'blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys))));
 			}
 	}
-	if( get_site_option('spam_master_protection') == get_site_option('spam_master_trd_full') ){
+	if( get_blog_option($blog_id, 'spam_master_protection') == get_blog_option($blog_id, 'spam_master_trd_full') ){
 			//JOIN & CLEAN PERSONAL KEYS + FULL KEYS TO BLACKLIST
 		$spam_master_array_join_keys = array_merge(explode("\n", $spam_master_full_keys), explode("\n", $spam_master_my_keys));
 		$spam_master_array_join_keys = array_map("trim", $spam_master_array_join_keys);
 		sort ($spam_master_array_join_keys);
 		$spam_master_string_join_keys = implode("\n", array_unique($spam_master_array_join_keys));
 			if(isset($spam_master_string_my_keys)){
-				update_site_option('spam_master_my_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_my_keys))));
-				update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys))));
+				update_blog_option($blog_id, 'spam_master_my_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_my_keys))));
+				update_blog_option($blog_id, 'blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys))));
 			}
 			else{
-			update_site_option('spam_master_my_keys', '');
-			update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys))));
+			update_blog_option($blog_id, 'spam_master_my_keys', '');
+			update_blog_option($blog_id, 'blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys))));
 			}
 	}
 }
@@ -115,7 +121,7 @@ $spam_master_string_keys_white = implode("\n", array_unique($spam_master_array_k
 
 //MULTI-SITE
 if( is_multisite() ) {
-	if( get_option('spam_master_protection') == get_option('spam_master_trd_free') ){
+	if( get_blog_option($blog_id, 'spam_master_protection') == get_blog_option($blog_id, 'spam_master_trd_free') ){
 		//JOIN & CLEAN PERSONAL KEYS + FREE KEYS TO BLACKLIST
 		$spam_master_array_join_keys_free = explode("\n", $spam_master_string_join_keys);
 		$spam_master_array_join_keys_white_clean = explode("\n", $spam_master_keys_white);
@@ -125,15 +131,15 @@ if( is_multisite() ) {
 		@sort ($spam_master_array_join_keys_clean);
 		@$spam_master_string_join_keys_clean = implode("\n", array_unique($spam_master_array_join_keys_clean));
 			if(isset($spam_master_array_keys_white)){
-				update_site_option('spam_master_keys_white', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_keys_white))));
-				update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
+				update_blog_option($blog_id, 'spam_master_keys_white', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_keys_white))));
+				update_blog_option($blog_id, 'blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
 			}
 			else{
-			update_site_option('spam_master_keys_white', '');
-			update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
+			update_blog_option($blog_id, 'spam_master_keys_white', '');
+			update_blog_option($blog_id, 'blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
 			}
 	}
-	if( get_option('spam_master_protection') == get_option('spam_master_trd_full') ){
+	if( get_blog_option($blog_id, 'spam_master_protection') == get_blog_option($blog_id, 'spam_master_trd_full') ){
 		//JOIN & CLEAN PERSONAL KEYS + FULL KEYS TO BLACKLIST
 		$spam_master_array_join_keys_full = explode("\n", $spam_master_string_join_keys);
 		$spam_master_array_join_keys_white_clean = explode("\n", $spam_master_keys_white);
@@ -143,12 +149,12 @@ if( is_multisite() ) {
 		@sort ($spam_master_array_join_keys_clean);
 		@$spam_master_string_join_keys_clean = implode("\n", array_unique($spam_master_array_join_keys_clean));
 			if(isset($spam_master_array_keys_white)){
-				update_site_option('spam_master_keys_white', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_keys_white))));
-				update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
+				update_blog_option($blog_id, 'spam_master_keys_white', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_keys_white))));
+				update_blog_option($blog_id, 'blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
 			}
 			else{
-			update_site_option('spam_master_keys_white', '');
-			update_site_option('blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
+			update_blog_option($blog_id, 'spam_master_keys_white', '');
+			update_blog_option($blog_id, 'blacklist_keys', strip_tags(preg_replace('/\n+/', "\n", trim($spam_master_string_join_keys_clean))));
 			}
 	}
 }
@@ -234,10 +240,10 @@ else {
 <div class="description">This column automatically displays  protection keys provided by Spam Master, domains, words, emails or Ip's. These keys are set by the protection level selected in Settings Page, Free or Full Protection. <b>Column Not Editable.</b></div>
 <br>
 <div class="description"><b>My Personal Protection List:</b></div>
-<div class="description">These are your personal keys, they get combined with the RBL Protection List keys. Add or delete as many domains, words, emails or Ip's as you want. <b>Column is Editable.</b></div>
+<div class="description">These are your personal keys, they get combined with the RBL Protection List keys. Add or delete as many domains, words, emails or Ip's as you want. Insert 1 per line. <b>Column is Editable.</b></div>
 <br>
 <div class="description"><b>My WhiteList:</b></div>
-<div class="description">Used to override domains, words, emails or Ip's automatically set by the RBL Protection List. The overriding domain, word, email or Ip needs to be written in exactly the same way as it shows in the RBL Protection List. <b>Column is Editable.</b></div>
+<div class="description">Used to override domains, words, emails or Ip's automatically set by the RBL Protection List. The overriding domain, word, email or Ip needs to be written in exactly the same way as it shows in the RBL Protection List. Insert 1 per line. <b>Column is Editable.</b></div>
 <br>
 <div class="description">Remember to always press <b>Save List</b> to apply your changes.</div>
 <br>
@@ -255,7 +261,7 @@ else {
 <br>
 <p>
 <a class="button-secondary" href="http://wordpress.techgasp.com" target="_blank" title="Visit Website">More TechGasp Plugins</a>
-<a class="button-secondary" href="http://wordpress.techgasp.com/support/" target="_blank" title="Facebook Page">TechGasp Support</a>
+<a class="button-secondary" href="http://wordpress.techgasp.com/support/" target="_blank" title="TechGasp Support">TechGasp Support</a>
 <a class="button-primary" href="http://wordpress.techgasp.com/spam-master/" target="_blank" title="Visit Website">Spam Master Info</a>
 <a class="button-primary" href="http://wordpress.techgasp.com/spam-master-documentation/" target="_blank" title="Visit Website">Spam Master Documentation</a>
 <a class="button-primary" href="http://wordpress.org/plugins/spam-master/" target="_blank" title="Visit Website">RATE US *****</a>

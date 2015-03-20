@@ -8,7 +8,7 @@ class spam_master_admin_updater_version_table extends WP_List_Table {
 	 * @return string, echo the markup of the rows
 	 */
 function display() {
-global $spam_plugin_slug;
+global $spam_master_plugin_slug, $blog_id;
 ?>
 <table class="widefat fixed" cellspacing="0">
 	<thead>
@@ -28,12 +28,12 @@ global $spam_plugin_slug;
 			<th class="manage-column column-columnname" scope="col"></th>
 			<th class="manage-column column-columnname" scope="col">
 			<?php
-if(get_site_option( 'spam_master_installed_version')  == get_site_option( 'spam_master_newest_version' )){
+if(get_blog_option($blog_id, 'spam_master_installed_version')  == get_blog_option($blog_id, 'spam_master_newest_version')){
 	echo '</td>';
 }
 else{
-$spam_plugin_slug = 'spam-master/spam-master.php';
-	echo '<a class="button-primary" href="'.wp_nonce_url( self_admin_url('update.php?action=upgrade-plugin&plugin=') . $spam_plugin_slug, 'upgrade-plugin_' . $spam_plugin_slug) .'" title="Update">Update</a></td>';
+$spam_master_plugin_slug = 'spam-master/spam-master.php';
+	echo '<a class="button-primary" href="'.wp_nonce_url( self_admin_url('update.php?action=upgrade-plugin&plugin=') . $spam_master_plugin_slug, 'upgrade-plugin_' . $spam_master_plugin_slug) .'" title="Update">Update</a></td>';
 }
 ?>
 			</th>
@@ -42,11 +42,20 @@ $spam_plugin_slug = 'spam-master/spam-master.php';
 
 	<tbody>
 		<tr class="alternate">
-			<td class="column-columnname" width="350" style="vertical-align:middle"><h2><b><?php echo get_option( 'spam_master_name' ); ?></b></h2></td>
+			<td class="column-columnname" width="350" style="vertical-align:middle"><h2><b>
+<?php
+if( is_multisite() ) {
+echo get_blog_option($blog_id, 'spam_master_name');
+}
+else{
+echo get_option( 'spam_master_name' );
+}
+?>
+			</b></h2></td>
 			<td class="column-columnname" style="vertical-align:middle">
 <?php
 if( is_multisite() ) {
-echo '<h3>Version '.get_site_option( 'spam_master_installed_version' ).'</h3>';
+echo '<h3>Version '.get_blog_option($blog_id, 'spam_master_installed_version').'</h3>';
 }
 else{
 echo '<h3>Version '.get_option( 'spam_master_installed_version' ).'</h3>';
@@ -55,16 +64,20 @@ echo '<h3>Version '.get_option( 'spam_master_installed_version' ).'</h3>';
 		</td>
 			<td class="column-columnname" style="vertical-align:middle">
 <?php
-
+if( is_multisite() ) {
+echo '<h3>Version '.get_blog_option($blog_id, 'spam_master_newest_version').'</h3>';
+}
+else{
 echo '<h3>Version '.get_option('spam_master_newest_version').'</h3>';
-
+}
 ?>
 			</td>
 			<td class="column-columnname" style="vertical-align:middle">
 <?php
-
-if(get_site_option( 'spam_master_installed_version')  == get_site_option( 'spam_master_newest_version' )){
-	echo '<img src="'.plugins_url('../images/techgasp-check-yes.png', __FILE__).'" alt="'.get_option('spam_master_name').'" width="90px" style="vertical-align:bottom" /></td>';
+if( is_multisite() ) {
+if(get_blog_option($blog_id, 'spam_master_installed_version')  == get_blog_option($blog_id, 'spam_master_newest_version' )){
+	echo '<img src="'.plugins_url('../images/techgasp-check-yes.png', __FILE__).'" alt="'.get_blog_option($blog_id, 'spam_master_name').'" width="90px" style="vertical-align:bottom" /></td>';
+}
 }
 else{
 	echo '<img src="'.plugins_url('../images/techgasp-check-no.png', __FILE__).'" alt="'.get_option('spam_master_name').'" width="90px" style="vertical-align:bottom" /></td>';

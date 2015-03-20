@@ -1,25 +1,26 @@
 <?php
+//Delete Transients after  week
+require_once( dirname( __FILE__ ) . '/spam-master-admin-registrations-transients.php');
 		/** function/method
 		* Usage: hooking (registering) the plugin menu
 		* Arg(0): null
 		* Return: void
 		*/
-		function menu_com_single(){
+		function menu_reg_net_single(){
 		if ( is_admin() )
-		add_submenu_page( 'spam-master', 'Comments', 'Comments', 'manage_options', 'spam-master-comments', 'spam_master_comments' );
+		add_submenu_page( 'spam-master', 'Registrations', 'Registrations', 'manage_options', 'spam-master-registrations', 'spam_master_registrations_net' );
 		}
 
 		///////////////////////
 		// WORDPRESS ACTIONS //
 		///////////////////////
 		if( is_multisite() ) {
-		add_action( 'admin_menu', 'menu_com_single' );
+		add_action( 'network_admin_menu', 'menu_reg_net_single' );
 		}
 		else {
-		add_action( 'admin_menu', 'menu_com_single' );
 		}
 
-function spam_master_comments(){
+		function spam_master_registrations_net(){
 ?>
 <div class="wrap">
 <div style="width:40px; vertical-align:middle; float:left;"><img src="<?php echo plugins_url('../images/techgasp-minilogo.png', __FILE__); ?>" alt="' . esc_attr__( 'TechGasp Plugins') . '" /><br /></div>
@@ -33,26 +34,15 @@ if(!class_exists('WP_List_Table')){
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 
-if(!class_exists('spam_master_comments_header')){
-	require_once( dirname( __FILE__ ) . '/spam-master-admin-comments-header.php');
-}
-
-if(!class_exists('spam_master_comments_table')){
-	require_once( dirname( __FILE__ ) . '/spam-master-admin-comments-table.php');
+if(!class_exists('spam_master_registrations_header')){
+	require_once( dirname( __FILE__ ) . '/spam-master-admin-registrations-header-network-admin.php');
 }
 
 //Prepare Table of elements
-$wp_list_table = new spam_master_comments_header();
-//Table of elements
-$wp_list_table->display();
-
-//Prepare Table of elements
-$wp_list_table = new spam_master_comments_table();
-$wp_list_table->prepare_items();
+$wp_list_table = new spam_master_registrations_header_network_admin();
 //Table of elements
 $wp_list_table->display();
 ?>
-<p class="submit" style="margin:0px; padding:0px; height:30px;"><input class='button-primary' type='submit' name='update' value='<?php _e("Refresh List", 'spam_master'); ?>' id='submitbutton' /></p>
 </fieldset>
 </form>
 <br>

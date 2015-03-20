@@ -43,11 +43,11 @@ class spam_master_registrations_table_blocked extends WP_List_Table {
 	 * Decide which columns to activate the sorting functionality on
 	 * @return array $sortable, the array of columns that can be sorted by the user
 	 */
-		function get_sortable_columns() {
-		return $sortable = array(
-			'col_blocks'	=>	array('option_value',false)
-		);
-	}
+//		function get_sortable_columns() {
+//		return $sortable = array(
+//			'col_blocks'	=>	array('option_value',false)
+//		);
+//	}
 
 	/**
 	 * Prepare the table with different parameters, pagination, columns and table elements
@@ -57,13 +57,26 @@ class spam_master_registrations_table_blocked extends WP_List_Table {
 		$screen = get_current_screen();
 
 		/* -- Preparing your query -- */
-	    $query = "SELECT option_value FROM $wpdb->options WHERE option_name LIKE '_transient_spam_master_invalid_email%'";
+		if (is_multisite()){
+			$blog_prefix = $wpdb->get_blog_prefix();
+			$table_prefix = $wpdb->base_prefix;
+			$query = "SELECT meta_value FROM {$table_prefix}sitemeta WHERE meta_key LIKE '_site_transient_spam_master_invalid_email%'";
+		}
+		else{
+			$table_prefix = $wpdb->base_prefix;
+			$query = "SELECT option_value FROM {$table_prefix}options WHERE option_name LIKE '_transient_spam_master_invalid_email%'";
+		}
 
 		/* -- Ordering parameters -- */
 	    //Parameters that are going to be used to order the result
-	    $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'option_value';
-	    $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : 'DESC';
-	    if(!empty($orderby) & !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
+		if(is_multisite()){
+		$orderby = !empty($_GET["orderby"]) ? esc_sql($_GET["orderby"]) : 'meta_value';
+		}
+		else{
+		$orderby = !empty($_GET["orderby"]) ? esc_sql($_GET["orderby"]) : 'option_value';
+		}
+		$order = !empty($_GET["order"]) ? esc_sql($_GET["order"]) : 'DESC';
+		if(!empty($orderby) & !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
 
 		/* -- Pagination parameters -- */
         //Number of elements in your table?
@@ -71,7 +84,7 @@ class spam_master_registrations_table_blocked extends WP_List_Table {
         //How many to display per page?
         $perpage = 10;
         //Which page is this?
-        $paged = !empty($_GET["paged"]) ? mysql_real_escape_string($_GET["paged"]) : '';
+        $paged = !empty($_GET["paged"]) ? esc_sql($_GET["paged"]) : '';
         //Page Number
         if(empty($paged) || !is_numeric($paged) || $paged<=0 ){ $paged=1; }
         //How many pages do we have in total?
@@ -118,7 +131,12 @@ class spam_master_registrations_table_blocked extends WP_List_Table {
 			//Open the line
 			static $row_class = '';
 			$row_class = ( $row_class == '' ? ' class="alternate"' : '' );
+			if(is_multisite()){
+			echo '<tr '.$row_class.' id="record_'.$rec->meta_value.'">';
+			}
+			else{
 			echo '<tr '.$row_class.' id="record_'.$rec->option_value.'">';
+			}
 			foreach ( $columns as $column_name => $column_display_name ) {
 
 				//Style attributes for each col
@@ -128,15 +146,15 @@ class spam_master_registrations_table_blocked extends WP_List_Table {
 				$style = ' style="display:none;"';
 				$attributes = '$class$style';
 
-				//edit link
-//				$editlink_mark  = $wpdb->query('UPDATE wp_users SET user_status = 1 WHERE ID = '.(int)$rec->ID);
-//				$editlink_unmark  = $wpdb->query('UPDATE wp_users SET user_status = 0 WHERE ID = '.(int)$rec->ID);
-//				$editlink_unmark  = '/wp-admin/user-edit.php?user_id='.(int)$rec->ID;
-
 				//Display the cell
-
+				if(is_multisite()){
+				$value = "meta_value";
+				}
+				else{
+				$value = "option_value";
+				}
 				switch ( $column_name ) {
-					case "col_blocks":	echo '<td '.$attributes.'>'.stripslashes($rec->option_value).'</td>';break;
+					case "col_blocks":	echo '<td '.$attributes.'>'.stripslashes($rec->$value).'</td>';break;
 				}
 			}
 

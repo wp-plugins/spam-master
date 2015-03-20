@@ -6,157 +6,159 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		* Arg(0): null
 		* Return: void
 		*/
-		if( is_multisite() ) {
-		function menu_multi(){
-		// Create menu
-		add_submenu_page( 'spam-master', 'Settings', 'Settings', 'manage_options', 'spam-master-settings', 'spam_master_options' );
-		}
-		}
-		else {
-		// Create menu
 		function menu_single(){
 		if ( is_admin() )
 		add_submenu_page( 'spam-master', 'Settings', 'Settings', 'manage_options', 'spam-master-settings', 'spam_master_options' );
-		}
 		}
 
 		////////////////////////////////////
 		// CHECK IF BUDDYPRESS IS PRESENT //
 		////////////////////////////////////
-		if (defined('BP_PLUGIN_DIR'))
+		if (defined('BP_PLUGIN_DIR')){
 		define('spam_master_buddypress',1);
-		else
+		$spam_master_buddypress = "1";
+		}
+		else{
 		define('spam_master_buddypress',0);
-		 //////////////////////////////////
-		// GET EXTERNAL SPAM MASTER KEYS //
-		///////////////////////////////////
-//		function spam_master_block(){
-//		$spam_master_block = "";
-//		}
+		$spam_master_buddypress = "0";
+		}
+
 		/////////////////////////////////////
 		// REGISTRATION WITHOUT BUDDYPRESS //
 		/////////////////////////////////////
-		function spam_master($user_login, $user_email, $errors) {
-		global $wpdb;
-		//Check Wordpress for Multisite
-		if( is_multisite() ) { 
-		$spam_master_blacklist = get_site_option('blacklist_keys');
-		} else {
-		$spam_master_blacklist = get_option('blacklist_keys');
-		}
-		$blacklist_string = $spam_master_blacklist;
-		$blacklist_array = explode("\n", $blacklist_string);
-		$blacklist_size = sizeof($blacklist_array);
-		// Analyse List
-		for($i = 0; $i < $blacklist_size; $i++)
-		{
-		$blacklist_current = trim($blacklist_array[$i]);
-		if(stripos($user_email, $blacklist_current) !== false)
-		{
-		$errors->add('invalid_email', '<strong>SPAM MASTER</strong>'.__( get_option('spam_master_message') ))& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
-		$count = $errors;
-		add_option( 'spam_master_block_count', $count );
-		$count = $wpdb->query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
-		return;
-		}
-		}
-		}
 		// Multisite Block
-		if( is_multisite() && ($spam_master_buddypress == 0) ) 
-		{
+		if( is_multisite() && ($spam_master_buddypress == 0) ){
 		add_filter('wpmu_validate_user_signup', 'spam_master_email_check', 99);
 		}
-		function spam_master_email_check($result) {
-		global $wpdb;
-		$spam_master_blacklist = get_option('blacklist_keys');
+		If(is_multisite()){
+		function spam_master_email_check($result){
+		global $wpdb, $blog_id;
+		$spam_master_blacklist = get_blog_option($blog_id, 'blacklist_keys');
 		$blacklist_string = $spam_master_blacklist;
 		$blacklist_array = explode("\n", $blacklist_string);
 		$blacklist_size = sizeof($blacklist_array);
+
 		$data = $_POST['user_email'];
+
 		// Analyse List
-		for($i = 0; $i < $blacklist_size; $i++) {
+		for($i = 0; $i < $blacklist_size; $i++){
 		$blacklist_current = trim($blacklist_array[$i]);
-		if(stripos($data, $blacklist_current) !== false) {
-		$result['errors']->add('invalid_email', '<strong>SPAM MASTER</strong>'. __( get_site_option( 'spam_master_message') ))& set_site_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
+		if(stripos($data, $blacklist_current) !== false){
+
+		$result['errors']->add('invalid_email',__('<strong>SPAM MASTER</strong>' . get_blog_option($blog_id, 'spam_master_message'),'spam_master'))& set_site_transient('spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
 		$count = $result;
-		add_site_option( 'spam_master_block_count', $count );
-		$count = $wpdb->query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
-			echo '<p class="error">'.get_site_option('spam_master_message').'</p>';
+		add_blog_option($blog_id, 'spam_master_block_count', $count );
+
+		$blog_prefix = $wpdb->get_blog_prefix($blog_id);
+		$count = $wpdb->query("UPDATE {$blog_prefix}options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
+		echo '<p class="error"><strong>SPAM MASTER</strong>'.get_blog_option($blog_id, 'spam_master_message').'</p>';
 		}
 		}
 		return $result;
 		}
+		}
+		//SingleSite Block
+		else{
+		function spam_master($user_login, $user_email, $errors){
+		global $wpdb;
+		$spam_master_blacklist = get_option('blacklist_keys');
+		$blacklist_string = $spam_master_blacklist;
+		$blacklist_array = explode("\n", $blacklist_string);
+		$blacklist_size = sizeof($blacklist_array);
+		// Analyse List
+		for($i = 0; $i < $blacklist_size; $i++){
+		$blacklist_current = trim($blacklist_array[$i]);
+		if(stripos($user_email, $blacklist_current) !== false){
+		$errors->add('invalid_email', '<strong>SPAM MASTER</strong>'.__( get_option('spam_master_message') ))& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$_POST['user_email'], 604800 );
+		$count = $errors;
+		add_option( 'spam_master_block_count', $count );
+		$table_prefix = $wpdb->base_prefix;
+		$count = $wpdb->query("UPDATE {$table_prefix}options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
+		return;
+		}
+		}
+		}
+		}
 		/////////////////////////////////
 		// REGISTRATION WITH BUDDYPRES //
 		/////////////////////////////////
-		function spam_master_buddypress_init() {
-			function spam_master_buddypress_register( $result ) {
+		add_action( 'bp_include', 'spam_master_buddypress_init' );
+		function spam_master_buddypress_init(){
+			function spam_master_buddypress_register($result){
 			global $wpdb;
-			if ( spam_master_buddypress_spammail( $result['user_email'] ) )
-			$result['errors']->add('user_email', '<strong>SPAM MASTER</strong>'. __( get_option('spam_master_message') ) )& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
-			$count = $result;
-			add_option( 'spam_master_block_count', $count );
-			$count = $wpdb->query("UPDATE wp_options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
-			return $result;
-		}
-		function spam_master_buddypress_spammail( $user_email ) {
-		// Budypress in Mulitsite
-		if( is_multisite() ) { 
-			$spam_master_blacklist = get_site_option('blacklist_keys');
+				if (spam_master_buddypress_spammail($result['user_email']))
+					if(is_multisite()){
+						$blog_id = get_current_blog_id();
+						$result['errors']->add('user_email',__('<strong>SPAM MASTER</strong>' . get_blog_option($blog_id, 'spam_master_message'),'spam_master'))& set_site_transient('spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
+						$count = $result;
+						add_blog_option($blog_id, 'spam_master_block_count', $count );
+						$blog_prefix = $wpdb->get_blog_prefix($blog_id);
+						$count = $wpdb->query("UPDATE {$blog_prefix}options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
+					}
+					else{
+						$result['errors']->add('user_email',__('<strong>SPAM MASTER</strong>' . get_option('spam_master_message') ))& set_transient( 'spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
+						$count = $result;
+						add_option( 'spam_master_block_count', $count );
+						$table_prefix = $wpdb->base_prefix;
+						$count = $wpdb->query("UPDATE {$table_prefix}options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
+					}
+				return $result;
 			}
-			else {
-			$spam_master_blacklist = get_option('blacklist_keys');
-			}
-			// Retrieve Blocked List
+			add_filter( 'bp_core_validate_user_signup', 'spam_master_buddypress_register' );
+			function spam_master_buddypress_spammail($user_email){
+				if(is_multisite()){
+					$blog_id = 1;
+					$spam_master_blacklist = get_blog_option($blog_id, 'blacklist_keys');
+				}
+				else {
+					$spam_master_blacklist = get_option('blacklist_keys');
+				}
+			//Get List
 			$blacklist_string = $spam_master_blacklist;
 			$blacklist_array = explode("\n", $blacklist_string);
 			$blacklist_size = sizeof($blacklist_array);
 			// Analyse List
-			for($i = 0; $i < $blacklist_size; $i++)
-			{
-			$blacklist_current = trim($blacklist_array[$i]);
-			if(stripos($user_email, $blacklist_current) !== false)
-			{
-			return true;
+				for($i = 0; $i < $blacklist_size; $i++){
+				$blacklist_current = trim($blacklist_array[$i]);
+				if(stripos($user_email, $blacklist_current) !== false){
+					return true;
+				}
+				}
 			}
-			}
-		}
 		}
 		/////////////////////////////////////////////
 		// ACTIVATION MESSAGE OPTIONS AND DEFAULTS //
 		/////////////////////////////////////////////
 		function spam_master_active() {
+		global $wpdb, $blog_id;
 		if( is_multisite() ) {
-		add_site_option('blacklist_keys','spam@spam.com');
-//		add_site_option('spam_master_message', ': Email, Domain, or Ip banned from registration.');
-		add_site_option( 'spam_master_block_count', 0);
+		add_blog_option($blog_id, 'blacklist_keys', 'spam@spam.com');
+		add_blog_option($blog_id, 'spam_master_block_count', 0);
 		}
 		else {
-//		add_option('spam_master_message', ': Email, Domain, or Ip banned from registration.');
-		add_option( 'spam_master_block_count', 0);
+		add_option('spam_master_block_count', 0);
 		}
 		}
 		///////////////////////
 		// WORDPRESS ACTIONS //
 		///////////////////////
 		if( is_multisite() ) {
-		add_action( 'network_admin_menu', 'menu_multi' );
-		//add_action( 'user_register', 'spam_master_get_keys' );
+		add_action('network_admin_menu', 'menu_single');
+//		add_action( 'bp_include', 'spam_master_buddypress_init' );
+//		add_filter( 'bp_core_validate_user_signup', 'spam_master_buddypress_spammail' );
 		}
 		else {
 		add_action( 'admin_menu', 'menu_single' );
-		add_action( 'bp_include', 'spam_master_buddypress_init' );
-		add_filter( 'bp_core_validate_user_signup', 'spam_master_buddypress_register' );
+//		add_action( 'bp_include', 'spam_master_buddypress_init' );
+//		add_filter( 'bp_core_validate_user_signup', 'spam_master_buddypress_register' );
 		add_action( 'register_post', 'spam_master', 10, 3 );
-		//add_action( 'user_register', 'spam_master' );
 		register_activation_hook( __FILE__, 'spam_master_active' );
-		//register_uninstall_hook( __FILE__, 'spam_master_uninstall' );
 		}
 		////////////////////////
 		// ADMINISTRATOR PAGE //
 		////////////////////////
 		function spam_master_options() {
-		global $wpdb;
+		global $wpdb, $blog_id;
 		?>
 <div class="wrap">
 <div style="width:40px; vertical-align:middle; float:left;"><img src="<?php echo plugins_url('../images/techgasp-minilogo.png', __FILE__); ?>" alt="' . esc_attr__( 'TechGasp Plugins') . '" /><br /></div>
@@ -169,9 +171,8 @@ if (isset($_POST['update']))
 // Update Message
 if ($spam_master_new_message = $_POST['spam_master_new_message'])
 {
-if( is_multisite() )
-{
-update_site_option('spam_master_message', $spam_master_new_message);
+if( is_multisite() ){
+update_blog_option($blog_id, 'spam_master_message', $spam_master_new_message);
 }
 else {
 update_option('spam_master_message', $spam_master_new_message);
@@ -182,10 +183,9 @@ update_option('spam_master_message', $spam_master_new_message);
 <p><strong><?php _e('Settings Saved!', 'spam_master'); ?></strong></p>
 </div>
 <?php }
-if( is_multisite() )
-{
-$spam_master_blacklist = get_site_option('blacklist_keys');
-$spam_master_blocked_message = get_site_option('spam_master_message');
+if( is_multisite() ){
+$spam_master_blacklist = get_blog_option( $blog_id, 'blacklist_keys');
+$spam_master_blocked_message = get_blog_option( $blog_id, 'spam_master_message');
 }
 else {
 $spam_master_blacklist = get_option('blacklist_keys');
@@ -197,7 +197,7 @@ $spam_master_blocked_message = get_option('spam_master_message');
 $license_code = false;
 if (isset($_POST['spam_master_license_code'])){
 if( is_multisite() ){
-update_site_option('spam_master_license_old_code', get_site_option('spam_master_license_code'));
+update_blog_option( $blog_id, 'spam_master_license_old_code', get_blog_option($blog_id, 'spam_master_license_code'));
 }
 else{
 update_option('spam_master_license_old_code', get_option('spam_master_license_code'));
@@ -205,7 +205,7 @@ update_option('spam_master_license_old_code', get_option('spam_master_license_co
 if  ($license_new_code = $_POST['spam_master_license_code']){
 //update_option('spam_master_license_old_code', get_option('spam_master_license_code'));
 if( is_multisite() ){
-update_site_option('spam_master_license_code', $license_new_code);
+update_blog_option( $blog_id, 'spam_master_license_code', $license_new_code);
 }
 else {
 update_option('spam_master_license_code', $license_new_code);
@@ -242,10 +242,11 @@ if(!class_exists('WP_List_Table')){
 	<tbody>
 <?php
 //Protection List
-if ( $_POST) {
-if ( isset($_POST['spam_master_protection_selection']) )
-if( is_multisite() ){
-update_site_option('spam_master_protection_selection', $_POST['spam_master_protection_selection'] );
+if($_POST){
+if(isset($_POST['spam_master_protection_selection']))
+if(is_multisite()){
+//update_site_option('spam_master_protection_selection', $_POST['spam_master_protection_selection'] );
+update_blog_option( $blog_id, 'spam_master_protection_selection', $_POST['spam_master_protection_selection']  );
 }
 else{
 update_option('spam_master_protection_selection', $_POST['spam_master_protection_selection'] );
@@ -256,13 +257,13 @@ update_option('spam_master_protection_selection', $_POST['spam_master_protection
 $key_lic = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvbGljLnR4dA==";
 $key_code = wp_remote_get(''.base64_decode($key_lic).'');
 $response_key = wp_remote_retrieve_response_code( $key_code );
-if( is_multisite() ) {
-update_site_option('spam_master_response_key', $response_key);
-add_site_option('spam_master_message', ': Email, Domain, or Ip banned from registration.');
+if( is_multisite() ){
+update_blog_option($blog_id, 'spam_master_response_key', $response_key);
+add_blog_option( $blog_id, 'spam_master_message', ': Email, Domain, or Ip banned from registration.');
 $trd_free = "spam_master_trd_free";
-add_site_option('spam_master_trd_free', $trd_free);
+add_blog_option( $blog_id, 'spam_master_trd_free', $trd_free);
 $trd_full = "aHR0cDovL3NwYW1tYXN0ZXIudGVjaGdhc3AuY29tL3NwYW1tYXN0ZXIvc3BhbW1hc3Rlcl9mdWxsLnR4dA==";
-add_site_option('spam_master_trd_full', $trd_full);
+add_blog_option( $blog_id, 'spam_master_trd_full', $trd_full);
 }
 else{
 update_option('spam_master_response_key', $response_key);
@@ -280,25 +281,29 @@ Select Protection Level:
 			<td class="column-columnname" width="250" height="25" style="vertical-align:middle">
 <select id="spam_master_protection_selection" name="spam_master_protection_selection">
 <option>SELECT PROTECTION</option>
-<option value="1" <?php echo get_option('spam_master_protection_selection') == 1 ? 'selected="selected"':''; ?>>Free Protection</option>
-<option value="2"<?php echo get_option('spam_master_protection_selection') == 2 ? 'selected="selected"':''; ?>>Full Protection</option>
+<option value="1"<?php if(is_multisite()){echo get_blog_option($blog_id, 'spam_master_protection_selection') == '1' ? 'selected="selected"':'';}else{echo get_option('spam_master_protection_selection') == '1' ? 'selected="selected"':'';} ?>>Free Protection</option>
+<option value="2"<?php if(is_multisite()){echo get_blog_option($blog_id, 'spam_master_protection_selection') == '2' ? 'selected="selected"':'';}else{echo get_option('spam_master_protection_selection') == '2' ? 'selected="selected"':'';} ?>>Full Protection</option>
 </select>
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
 <font color="white"><b><?php
 if( is_multisite() ) {
-	if(get_site_option('spam_master_protection_selection') == 1 ){
+	if(get_blog_option($blog_id, 'spam_master_protection_selection') == '1' ){
+		update_blog_option($blog_id, 'spam_master_selected', "FREE PROTECTION");
 		echo "FREE PROTECTION";
 	}
 	else {
+		update_blog_option($blog_id, 'spam_master_selected', "FULL PROTECTION");
 		echo "FULL PROTECTION";
 	}
 }
 else{
-	if(get_option('spam_master_protection_selection') == 1 ){
+	if(get_option('spam_master_protection_selection') == '1' ){
+		update_option('spam_master_selected', "FREE PROTECTION");
 		echo "FREE PROTECTION";
 	}
 	else {
+		update_option('spam_master_selected', "FULL PROTECTION");
 		echo "FULL PROTECTION";
 	}
 }
@@ -315,115 +320,113 @@ else{
 		</tr>
 <?php
 //IF MULTI-SITE
-if( is_multisite() ) {
-if (get_site_option( 'spam_master_protection_selection') ==  1 ){
-update_site_option('spam_master_protection', $trd_free);
-add_site_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
-	if ( get_site_option('spam_master_response_key') == 200 ){
+if(is_multisite()){
+$blog_prefix = $wpdb->get_blog_prefix();
+$table_prefix = $wpdb->base_prefix;
+if (get_blog_option($blog_id, 'spam_master_protection_selection') ==  1 ){
+update_blog_option($blog_id, 'spam_master_protection', $trd_free);
+add_blog_option($blog_id, 'spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
+	if ( get_blog_option($blog_id, 'spam_master_response_key') == 200 ){
 		$license_color = "F2AE41";
-		update_site_option('spam_master_license_color', $license_color);
+		update_blog_option($blog_id, 'spam_master_license_color', $license_color);
 		$license_status = "FREE PROTECTION 4 THREATS";
-		update_site_option('spam_master_license_status', $license_status);
+		update_blog_option($blog_id, 'spam_master_license_status', $license_status);
 		$full_rbl_color = "525051";
-		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
+		update_blog_option($blog_id, 'spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
-		update_site_option('spam_master_full_rbl_status', $full_rbl_status);
+		update_blog_option($blog_id, 'spam_master_full_rbl_status', $full_rbl_status);
 		$learning_color = "525051";
-		update_site_option('spam_master_learning_color', $learning_color);
+		update_blog_option($blog_id, 'spam_master_learning_color', $learning_color);
 		$learning_status = "OFFLINE";
-		update_site_option('spam_master_learning_status', $learning_status);
+		update_blog_option($blog_id, 'spam_master_learning_status', $learning_status);
 //
-//		$blacklist_keys = get_site_option( 'blacklist_keys' );
-		update_site_option('spam_master_rbl_keys', get_site_option('spam_master_free_keys'));
-		update_site_option('blacklist_keys', get_site_option('spam_master_free_keys'));
+		update_blog_option($blog_id, 'spam_master_rbl_keys', get_blog_option($blog_id, 'spam_master_free_keys'));
+		update_blog_option($blog_id, 'blacklist_keys', get_blog_option($blog_id, 'spam_master_free_keys'));
 //
-		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
+		$protection_total_number = $wpdb->get_var("SELECT option_value FROM {$table_prefix}options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
-		update_site_option('spam_master_protection_total', $protection_total);
+		update_blog_option($blog_id, 'spam_master_protection_total', $protection_total);
 		$protection_number_color = "F2AE41";
-		update_site_option('spam_master_protection_number_color', $protection_number_color);
-		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(ID) FROM $wpdb->users");
-		update_site_option('spam_master_user_registrations', $spam_master_user_registrations);
+		update_blog_option($blog_id, 'spam_master_protection_number_color', $protection_number_color);
+		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(umeta_id) FROM {$table_prefix}usermeta WHERE meta_key='primary_blog' AND meta_value={$blog_id}");
+		update_blog_option($blog_id, 'spam_master_user_registrations', $spam_master_user_registrations);
 		}
 		else{
 		$license_color = "F2AE41";
-		update_site_option('spam_master_license_color', $license_color);
+		update_blog_option($blog_id, 'spam_master_license_color', $license_color);
 		$license_status = "FREE PROTECTION 4 THREATS";
-		update_site_option('spam_master_license_status', $license_status);
+		update_blog_option($blog_id, 'spam_master_license_status', $license_status);
 		$full_rbl_color = "525051";
-		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
+		update_blog_option($blog_id, 'spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
-		update_site_option('spam_master_full_rbl_status', $full_rbl_status);
+		update_blog_option($blog_id, 'spam_master_full_rbl_status', $full_rbl_status);
 		$learning_color = "525051";
-		update_site_option('spam_master_learning_color', $learning_color);
+		update_blog_option($blog_id, 'spam_master_learning_color', $learning_color);
 		$learning_status = "OFFLINE";
-		update_site_option('spam_master_learning_status', $learning_status);
+		update_blog_option($blog_id, 'spam_master_learning_status', $learning_status);
 //
-//		$blacklist_keys = get_site_option( 'blacklist_keys' );
-		update_site_option('spam_master_rbl_keys', get_site_option('spam_master_free_keys'));
-		update_site_option('blacklist_keys', get_site_option('spam_master_free_keys'));
+		update_blog_option($blog_id, 'spam_master_rbl_keys', get_blog_option($blog_id, 'spam_master_free_keys'));
+		update_blog_option($blog_id, 'blacklist_keys', get_blog_option($blog_id, 'spam_master_free_keys'));
 //
-		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
+		$protection_total_number = $wpdb->get_var("SELECT option_value FROM {$table_prefix}options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
-		update_site_option('spam_master_protection_total', $protection_total);
+		update_blog_option($blog_id, 'spam_master_protection_total', $protection_total);
 		$protection_number_color = "F2AE41";
-		update_site_option('spam_master_protection_number_color', $protection_number_color);
-		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(ID) FROM $wpdb->users");
-		update_site_option('spam_master_user_registrations', $spam_master_user_registrations);
+		update_blog_option($blog_id, 'spam_master_protection_number_color', $protection_number_color);
+		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(umeta_id) FROM FROM {$table_prefix}usermeta WHERE meta_key='primary_blog' AND meta_value={$blog_id}");
+		update_blog_option($blog_id, 'spam_master_user_registrations', $spam_master_user_registrations);
 		}
 }
-if (get_site_option( 'spam_master_protection_selection') == 2 ){
-update_site_option('spam_master_protection', $trd_full);
+if (get_blog_option($blog_id, 'spam_master_protection_selection') == 2 ){
+update_blog_option($blog_id, 'spam_master_protection', $trd_full);
 	if ( $response_key == 200 ){
 		$license_color = "07B357";
-		update_site_option('spam_master_license_color', $license_color);
+		update_blog_option($blog_id, 'spam_master_license_color', $license_color);
 		$license_status = "VALID LICENSE";
-		update_site_option('spam_master_license_status', $license_status);
+		update_blog_option($blog_id, 'spam_master_license_status', $license_status);
 		$full_rbl_color = "07B357";
-		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
+		update_blog_option($blog_id, 'spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Optimal Connection";
-		update_site_option('spam_master_full_rbl_status', $full_rbl_status);
+		update_blog_option($blog_id, 'spam_master_full_rbl_status', $full_rbl_status);
 		$learning_color = "07B357";
-		update_site_option('spam_master_learning_color', $learning_color);
+		update_blog_option($blog_id, 'spam_master_learning_color', $learning_color);
 		$learning_status = "ONLINE";
-		update_site_option('spam_master_learning_status', $learning_status);
-		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
+		update_blog_option($blog_id, 'spam_master_learning_status', $learning_status);
+		$protection_total_number = $wpdb->get_var("SELECT option_value FROM {$table_prefix}options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
-		update_site_option('spam_master_protection_total', $protection_total);
+		update_blog_option($blog_id, 'spam_master_protection_total', $protection_total);
 		$protection_number_color = "07B357";
-		update_site_option('spam_master_protection_number_color', $protection_number_color);
-		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(ID) FROM $wpdb->users");
-		update_site_option('spam_master_user_registrations', $spam_master_user_registrations);
+		update_blog_option($blog_id, 'spam_master_protection_number_color', $protection_number_color);
+		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(umeta_id) FROM {$table_prefix}usermeta WHERE meta_key='primary_blog' AND meta_value={$blog_id}");
+		update_blog_option($blog_id, 'spam_master_user_registrations', $spam_master_user_registrations);
 //
-//		$blacklist_keys = get_site_option( 'blacklist_keys' );
-		update_site_option('spam_master_rbl_keys', get_site_option('spam_master_full_keys'));
-		update_site_option('blacklist_keys', get_site_option('spam_master_full_keys'));
+		update_blog_option($blog_id, 'spam_master_rbl_keys', get_blog_option($blog_id, 'spam_master_full_keys'));
+		update_blog_option($blog_id, 'blacklist_keys', get_blog_option($blog_id, 'spam_master_full_keys'));
 //
 	}
 	else {
 		$license_color = "E8052B";
-		update_site_option('spam_master_license_color', $license_color);
+		update_blog_option($blog_id, 'spam_master_license_color', $license_color);
 		$license_status = "No Valid License, Select Free Protection";
-		update_site_option('spam_master_license_status', $license_status);
+		update_blog_option($blog_id, 'spam_master_license_status', $license_status);
 		$full_rbl_color = "525051";
-		update_site_option('spam_master_full_rbl_color', $full_rbl_color);
+		update_blog_option($blog_id, 'spam_master_full_rbl_color', $full_rbl_color);
 		$full_rbl_status = "Disconnected";
-		update_site_option('spam_master_full_rbl_status', $full_rbl_status);
+		update_blog_option($blog_id, 'spam_master_full_rbl_status', $full_rbl_status);
 		$learning_color = "F2AE41";
-		update_site_option('spam_master_learning_color', $learning_color);
+		update_blog_option($blog_id, 'spam_master_learning_color', $learning_color);
 		$learning_status = "No License, Select FREE PROTECTION in Settings Page";
-		update_site_option('spam_master_learning_status', $learning_status);
+		update_blog_option($blog_id, 'spam_master_learning_status', $learning_status);
 		$protection_total = "No License. Select FREE PROTECTION in Settings Page";
-		update_site_option('spam_master_protection_total', $protection_total);
+		update_blog_option($blog_id, 'spam_master_protection_total', $protection_total);
 		$protection_number_color = "F2AE41";
-		update_site_option('spam_master_protection_number_color', $protection_number_color);
-		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(ID) FROM $wpdb->users");
-		update_site_option('spam_master_user_registrations', $spam_master_user_registrations);
+		update_blog_option($blog_id, 'spam_master_protection_number_color', $protection_number_color);
+		$spam_master_user_registrations = $wpdb->get_var("SELECT COUNT(umeta_id) FROM {$table_prefix}usermeta WHERE meta_key='primary_blog' AND meta_value={$blog_id}");
+		update_blog_option($blog_id, 'spam_master_user_registrations', $spam_master_user_registrations);
 		$trd_light = false;
 //
-//		$blacklist_keys = get_site_option( 'blacklist_keys' );
-		update_site_option('spam_master_rbl_keys', get_site_option('spam_master_free_keys'));
-		update_site_option('blacklist_keys', get_site_option('spam_master_free_keys'));
+		update_blog_option($blog_id, 'spam_master_rbl_keys', get_blog_option($blog_id, 'spam_master_free_keys'));
+		update_blog_option($blog_id, 'blacklist_keys', get_blog_option($blog_id, 'spam_master_free_keys'));
 //
 	}
 }
@@ -447,11 +450,11 @@ add_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 		$learning_status = "OFFLINE";
 		update_option('spam_master_learning_status', $learning_status);
 //
-//		$blacklist_keys = get_option( 'blacklist_keys' );
 		update_option('spam_master_rbl_keys', get_option('spam_master_free_keys'));
-		update_option('blacklist_keys', get_site_option('spam_master_free_keys'));
+		update_option('blacklist_keys', get_option('spam_master_free_keys'));
 //
-		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
+		$table_prefix = $wpdb->base_prefix;
+		$protection_total_number = $wpdb->get_var("SELECT option_value FROM {$table_prefix}options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
 		update_option('spam_master_protection_total', $protection_total);
 		$protection_number_color = "F2AE41";
@@ -475,9 +478,10 @@ add_option('spam_master_free_keys', "hotmail\r\nmsn\r\nlive\r\noutlook");
 //
 //		$blacklist_keys = get_option( 'blacklist_keys' );
 		update_option('spam_master_rbl_keys', get_option('spam_master_free_keys'));
-		update_site_option('blacklist_keys', get_site_option('spam_master_free_keys'));
+		update_option('blacklist_keys', get_option('spam_master_free_keys'));
 //
-		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
+		$table_prefix = $wpdb->base_prefix;
+		$protection_total_number = $wpdb->get_var("SELECT option_value FROM {$table_prefix}options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
 		update_option('spam_master_protection_total', $protection_total);
 		$protection_number_color = "F2AE41";
@@ -506,9 +510,10 @@ update_option('spam_master_protection', $trd_full);
 //
 //		$blacklist_keys = get_option( 'blacklist_keys' );
 		update_option('spam_master_rbl_keys', get_option('spam_master_full_keys'));
-		update_option('blacklist_keys', get_site_option('spam_master_full_keys'));
+		update_option('blacklist_keys', get_option('spam_master_full_keys'));
 //
-		$protection_total_number = $wpdb->get_var("SELECT option_value FROM wp_options WHERE option_name='blacklist_keys'");
+		$table_prefix = $wpdb->base_prefix;
+		$protection_total_number = $wpdb->get_var("SELECT option_value FROM {$table_prefix}options WHERE option_name='blacklist_keys'");
 		$protection_total = str_word_count($protection_total_number);
 		update_option('spam_master_protection_total', $protection_total);
 		$protection_number_color = "07B357";
@@ -538,7 +543,7 @@ update_option('spam_master_protection', $trd_full);
 //
 //		$blacklist_keys = get_option( 'blacklist_keys' );
 		update_option('spam_master_rbl_keys', get_option('spam_master_free_keys'));
-		update_option('blacklist_keys', get_site_option('spam_master_free_keys'));
+		update_option('blacklist_keys', get_option('spam_master_free_keys'));
 //
 	}
 }
@@ -572,8 +577,8 @@ update_option('spam_master_protection', $trd_full);
 Insert Spam Master License: 
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" width="250"><input id="spam_master_license_code" name="spam_master_license_code" type="text" size="16" value="<?php 
-if( is_multisite() ) {
-echo get_site_option('spam_master_license_code');
+if(is_multisite()){
+echo get_blog_option( $blog_id, 'spam_master_license_code');
 }
 else{
 echo get_option('spam_master_license_code');
@@ -581,15 +586,15 @@ echo get_option('spam_master_license_code');
 ?>">
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_license_color');
+if(is_multisite()){
+echo get_blog_option( $blog_id, 'spam_master_license_color');
 }
 else{
 echo get_option('spam_master_license_color');
 }
 ?>"><font color="white"><b><?php
-if( is_multisite() ) {
-echo get_site_option('spam_master_license_status');
+if(is_multisite()){
+echo get_blog_option( $blog_id, 'spam_master_license_status');
 }
 else{
 echo get_option('spam_master_license_status');
@@ -609,8 +614,8 @@ echo get_option('spam_master_license_status');
 
 <?php
 //HOOK LICENSE
-if( is_multisite() ) {
-if(get_site_option('spam_master_license_code') !== get_site_option('spam_master_license_old_code')){
+if(is_multisite() ){
+if(get_blog_option( $blog_id, 'spam_master_license_code') !== get_blog_option( $blog_id, 'spam_master_license_old_code')){
 require_once( dirname( __FILE__ ) . '/spam-master-license.php');
 }
 else {
@@ -661,8 +666,8 @@ This message is displayed to spam users who are not allowed to register in your 
 <fieldset class="options">
 <textarea name="blacklist_keys" cols="40" rows="15" style="display:none;">
 <?php
-if( is_multisite() ) {
-echo strip_tags (get_site_option('blacklist_keys'));
+if(is_multisite()){
+echo strip_tags (get_blog_option($blog_id, 'blacklist_keys'));
 }
 else{
 echo strip_tags (get_option('blacklist_keys'));
@@ -678,7 +683,7 @@ echo strip_tags (get_option('blacklist_keys'));
 <br>
 <p>
 <a class="button-secondary" href="http://wordpress.techgasp.com" target="_blank" title="Visit Website">More TechGasp Plugins</a>
-<a class="button-secondary" href="http://wordpress.techgasp.com/support/" target="_blank" title="Facebook Page">TechGasp Support</a>
+<a class="button-secondary" href="http://wordpress.techgasp.com/support/" target="_blank" title="TechGasp Support">TechGasp Support</a>
 <a class="button-primary" href="http://wordpress.techgasp.com/spam-master/" target="_blank" title="Visit Website">Spam Master Info</a>
 <a class="button-primary" href="http://wordpress.techgasp.com/spam-master-documentation/" target="_blank" title="Visit Website">Spam Master Documentation</a>
 <a class="button-primary" href="http://wordpress.org/plugins/spam-master/" target="_blank" title="Visit Website">RATE US *****</a>

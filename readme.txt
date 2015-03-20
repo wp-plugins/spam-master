@@ -2,8 +2,8 @@
 Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
-Tested up to: 4.1
-Stable tag: 4.3.6.5
+Tested up to: 4.1.1
+Stable tag: 4.4.1.4
 License: GPLv2 or later
 
 Spam Master is the Ultimate Spam Protection plugin that blocks new user registrations and post comments with Real Time anti-spam lists.
@@ -42,6 +42,8 @@ Very few plugins will actually show the statistics we packed into spam master. S
 * Spam Master allows you to view a week of blocked registrations (date and email) and export the data as csv file. Data gets auto-deleted after 7 days to keep your database light
 * IMPORTANT: Free Version only protects you from hotmail, msn, live and outlook spam
 * IMPORTANT: Full Version requires paid RBL license to work and protects you from thousands of spam sources
+* Spam Master (experimental) optionally includes the famous Google reCAPTCHA. Easy to activate and to implement on Wordpress native or Buddypress registrations 
+* Spam Master (experimental) optionally includes Honeypot registration fields for Wordpress and Buddypress
 
 [Full Protection License Link](http://wordpress.techgasp.com/spam-master/)
 
@@ -95,6 +97,31 @@ Very few plugins will actually show the statistics we packed into spam master. S
 
 
 == Changelog ==
+
+= 4.4.1.4 =
+* Getting all network sites to work with blog id 1
+* Adding blog prefix to all database calls
+* Adding Table prefix to all database calls
+* Re-Captcha and Honeypots Wordpress and now Buddypress ready
+
+= 4.4.1.3 =
+* Tweaking Updater
+
+= 4.4.1.2 =
+* Adding Network Warnings and help texts
+
+= 4.4.1.1 =
+* Fixing uninstall, plugin deletion on wordpress network and multi-sites
+
+= 4.4.1.0 =
+* Fixing Network Blacklist
+* General clean-up and speed boost
+* Adding Honeypots to registration page
+
+= 4.4.0 =
+* Wordpress multi-site or wordpress network ready
+* New screenshots and images
+* Adding re-captcha to registration page
 
 = 4.3.6.5 =
 * Fixing 3 warnings in free version mode

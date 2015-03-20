@@ -3,7 +3,8 @@ if(!class_exists('WP_List_Table')){
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 class spam_master_statistics_table extends WP_List_Table {
-	function display() {
+	function display(){
+	global $wpdb, $blog_id;
 ?>
 <table class="widefat fixed" cellspacing="0">
 	<thead>
@@ -28,7 +29,7 @@ class spam_master_statistics_table extends WP_List_Table {
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
 <font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_user_registrations');
+echo get_blog_option($blog_id, 'spam_master_user_registrations');
 }
 else{
 echo get_option('spam_master_user_registrations');
@@ -46,7 +47,7 @@ Total Users Blocked
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3"><font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_block_count');
+echo get_blog_option(1, 'spam_master_block_count');
 }
 else{
 echo get_option('spam_master_block_count');
@@ -65,7 +66,7 @@ echo get_option('spam_master_block_count');
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
 <font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_comments_total');
+echo get_blog_option($blog_id, 'spam_master_comments_total');
 }
 else{
 echo get_option('spam_master_comments_total');
@@ -83,7 +84,7 @@ Total Comments Blocked
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3"><font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_comments_total_blocked');
+echo get_blog_option($blog_id, 'spam_master_comments_total_blocked');
 }
 else{
 echo get_option('spam_master_comments_total_blocked');
@@ -102,7 +103,7 @@ Total Comments Approved
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
 <font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_comments_total_approved');
+echo get_blog_option($blog_id, 'spam_master_comments_total_approved');
 }
 else{
 echo get_option('spam_master_comments_total_approved');
@@ -121,7 +122,7 @@ Total Comments Pending
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
 <font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_comments_total_pending');
+echo get_blog_option($blog_id, 'spam_master_comments_total_pending');
 }
 else{
 echo get_option('spam_master_comments_total_pending');
@@ -140,7 +141,7 @@ Total Comments Trashed
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#078BB3">
 <font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_comments_total_trashed');
+echo get_blog_option($blog_id, 'spam_master_comments_total_trashed');
 }
 else{
 echo get_option('spam_master_comments_total_trashed');
@@ -158,19 +159,19 @@ echo get_option('spam_master_comments_total_trashed');
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_protection_number_color');
+echo get_blog_option(1, 'spam_master_protection_number_color');
 }
 else{
 echo get_option('spam_master_protection_number_color');
 }
 ?>"><font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_protection_total');
+echo get_blog_option(1, 'spam_master_protection_total');
 }
 else{
 echo get_option('spam_master_protection_total');
 }
-?></b> Threats</font>
+?> Threats</b></font>
 			</td>
 		</tr>
 		<tr>
@@ -183,14 +184,14 @@ echo get_option('spam_master_protection_total');
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_learning_color');
+echo get_blog_option(1, 'spam_master_learning_color');
 }
 else{
 echo get_option('spam_master_learning_color');
 }
 ?>"><font color="white"><b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_learning_status');
+echo get_blog_option(1, 'spam_master_learning_status');
 }
 else{
 echo get_option('spam_master_learning_status');
@@ -208,14 +209,14 @@ echo get_option('spam_master_learning_status');
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_full_rbl_color');
+echo get_blog_option(1, 'spam_master_full_rbl_color');
 }
 else{
 echo get_option('spam_master_full_rbl_color');
 }
 ?>"><font color="white">Cluster Status: <b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_full_rbl_status');
+echo get_blog_option(1, 'spam_master_full_rbl_status');
 }
 else{
 echo get_option('spam_master_full_rbl_status');
@@ -233,14 +234,14 @@ echo get_option('spam_master_full_rbl_status');
 			</td>
 			<td class="column-columnname" style="vertical-align:middle" bgcolor="#<?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_full_rbl_color');
+echo get_blog_option(1, 'spam_master_full_rbl_color');
 }
 else{
 echo get_option('spam_master_full_rbl_color');
 }
 ?>"><font color="white">Cluster Status: <b><?php
 if( is_multisite() ) {
-echo get_site_option('spam_master_full_rbl_status');
+echo get_blog_option(1, 'spam_master_full_rbl_status');
 }
 else{
 echo get_option('spam_master_full_rbl_status');

@@ -48,29 +48,39 @@ class spam_master_registrations_table extends WP_List_Table {
 	 * Decide which columns to activate the sorting functionality on
 	 * @return array $sortable, the array of columns that can be sorted by the user
 	 */
-		function get_sortable_columns() {
-		return $sortable = array(
-			'col_user_registered'	=>	array('user_registered',false),
-			'col_user_id'			=>	array('ID',false),
-			'col_user_status'		=>	array('user_status',false)
-		);
-	}
+//		function get_sortable_columns() {
+//		return $sortable = array(
+//			'col_user_registered'	=>	array('user_registered',false),
+//			'col_user_id'			=>	array('ID',false),
+//			'col_user_status'		=>	array('user_status',false)
+//		);
+//	}
 
 	/**
 	 * Prepare the table with different parameters, pagination, columns and table elements
 	 */
 	function prepare_items() {
-		global $wpdb, $_wp_column_headers;
+		global $wpdb, $_wp_column_headers, $blog_id;
+		$table_prefix = $wpdb->base_prefix;
 		$screen = get_current_screen();
 
 		/* -- Preparing your query -- */
-	    $query = "SELECT * FROM $wpdb->users";
-
+		if(is_multisite()){
+		$query = "SELECT t1.*
+		FROM {$table_prefix}users AS t1
+		INNER JOIN {$table_prefix}usermeta AS t2
+		ON t1.ID = t2.user_id
+		WHERE (t2.meta_key='primary_blog' AND t2.meta_value={$blog_id})
+		ORDER BY t1.user_registered DESC";
+		}
+		else{
+		$query = "SELECT * FROM {$table_prefix}users";
 		/* -- Ordering parameters -- */
 	    //Parameters that are going to be used to order the result
-	    $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'user_registered';
-	    $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : 'DESC';
+	    $orderby = !empty($_GET["orderby"]) ? esc_sql($_GET["orderby"]) : 'user_registered';
+	    $order = !empty($_GET["order"]) ? esc_sql($_GET["order"]) : 'DESC';
 	    if(!empty($orderby) & !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
+		}
 
 		/* -- Pagination parameters -- */
         //Number of elements in your table?
@@ -78,7 +88,7 @@ class spam_master_registrations_table extends WP_List_Table {
         //How many to display per page?
         $perpage = 10;
         //Which page is this?
-        $paged = !empty($_GET["paged"]) ? mysql_real_escape_string($_GET["paged"]) : '';
+        $paged = !empty($_GET["paged"]) ? esc_sql($_GET["paged"]) : '';
         //Page Number
         if(empty($paged) || !is_numeric($paged) || $paged<=0 ){ $paged=1; }
         //How many pages do we have in total?

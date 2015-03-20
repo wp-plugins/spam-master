@@ -71,8 +71,8 @@ class spam_master_comments_table extends WP_List_Table {
 
 		/* -- Ordering parameters -- */
 	    //Parameters that are going to be used to order the result
-	    $orderby = !empty($_GET["orderby"]) ? mysql_real_escape_string($_GET["orderby"]) : 'comment_ID';
-	    $order = !empty($_GET["order"]) ? mysql_real_escape_string($_GET["order"]) : 'DESC';
+	    $orderby = !empty($_GET["orderby"]) ? esc_sql($_GET["orderby"]) : 'comment_ID';
+	    $order = !empty($_GET["order"]) ? esc_sql($_GET["order"]) : 'DESC';
 	    if(!empty($orderby) & !empty($order)){ $query.=' ORDER BY '.$orderby.' '.$order; }
 
 		/* -- Pagination parameters -- */
@@ -81,7 +81,7 @@ class spam_master_comments_table extends WP_List_Table {
         //How many to display per page?
         $perpage = 10;
         //Which page is this?
-        $paged = !empty($_GET["paged"]) ? mysql_real_escape_string($_GET["paged"]) : '';
+        $paged = !empty($_GET["paged"]) ? esc_sql($_GET["paged"]) : '';
         //Page Number
         if(empty($paged) || !is_numeric($paged) || $paged<=0 ){ $paged=1; }
         //How many pages do we have in total?
@@ -139,13 +139,7 @@ class spam_master_comments_table extends WP_List_Table {
 				$attributes = '$class$style';
 				$length = 28;
 
-				//edit link
-//				$editlink_mark  = $wpdb->query('UPDATE wp_users SET user_status = 1 WHERE ID = '.(int)$rec->ID);
-//				$editlink_unmark  = $wpdb->query('UPDATE wp_users SET user_status = 0 WHERE ID = '.(int)$rec->ID);
-//				$editlink_unmark  = '/wp-admin/user-edit.php?user_id='.(int)$rec->ID;
-
 				//Display the cell
-
 				switch ( $column_name ) {
 					case "col_blocks_date":	echo '<td '.$attributes.'>'.stripslashes($rec->comment_date).'</td>';break;
 					case "col_blocks_author":	if ( strlen($rec->comment_author) > $length ) {

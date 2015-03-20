@@ -6,25 +6,16 @@ require_once( dirname( __FILE__ ) . '/spam-master-admin-registrations-transients
 		* Arg(0): null
 		* Return: void
 		*/
-		if( is_multisite() ) {
-		function menu_reg_multi(){
-		// Create menu
-		add_submenu_page( 'spam-master', 'Registrations', 'Registrations', 'manage_options', 'spam-master-registrations', 'spam_master_registrations' );
-		}
-		}
-		else {
-		// Create menu
 		function menu_reg_single(){
 		if ( is_admin() )
 		add_submenu_page( 'spam-master', 'Registrations', 'Registrations', 'manage_options', 'spam-master-registrations', 'spam_master_registrations' );
-		}
 		}
 
 		///////////////////////
 		// WORDPRESS ACTIONS //
 		///////////////////////
 		if( is_multisite() ) {
-		add_action( 'network_admin_menu', 'menu_reg_multi' );
+		add_action( 'admin_menu', 'menu_reg_single' );
 		}
 		else {
 		add_action( 'admin_menu', 'menu_reg_single' );
@@ -94,7 +85,7 @@ $wp_list_table->display();
 <br>
 <p>
 <a class="button-secondary" href="http://wordpress.techgasp.com" target="_blank" title="Visit Website">More TechGasp Plugins</a>
-<a class="button-secondary" href="http://wordpress.techgasp.com/support/" target="_blank" title="Facebook Page">TechGasp Support</a>
+<a class="button-secondary" href="http://wordpress.techgasp.com/support/" target="_blank" title="TechGasp Support">TechGasp Support</a>
 <a class="button-primary" href="http://wordpress.techgasp.com/spam-master/" target="_blank" title="Visit Website">Spam Master Info</a>
 <a class="button-primary" href="http://wordpress.techgasp.com/spam-master-documentation/" target="_blank" title="Visit Website">Spam Master Documentation</a>
 <a class="button-primary" href="http://wordpress.org/plugins/spam-master/" target="_blank" title="Visit Website">RATE US *****</a>
