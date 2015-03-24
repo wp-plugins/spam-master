@@ -41,6 +41,12 @@ update_blog_option($blog_id, 'spam_master_recaptcha_public_key', $_POST['spam_ma
 else{
 update_blog_option($blog_id, 'spam_master_recaptcha_public_key', '' );
 }
+if (isset($_POST['spam_master_recaptcha_secret_key'])){
+update_blog_option($blog_id, 'spam_master_recaptcha_secret_key', $_POST['spam_master_recaptcha_secret_key'] );
+}
+else{
+update_blog_option($blog_id, 'spam_master_recaptcha_secret_key', '' );
+}
 if (isset($_POST['spam_master_recaptcha_theme'])){
 update_blog_option($blog_id, 'spam_master_recaptcha_theme', $_POST['spam_master_recaptcha_theme'] );
 }
@@ -73,6 +79,12 @@ update_option('spam_master_recaptcha_public_key', $_POST['spam_master_recaptcha_
 else{
 update_option('spam_master_recaptcha_public_key', '' );
 }
+if (isset($_POST['spam_master_recaptcha_secret_key'])){
+update_option('spam_master_recaptcha_secret_key', $_POST['spam_master_recaptcha_secret_key'] );
+}
+else{
+update_option('spam_master_recaptcha_secret_key', '' );
+}
 if (isset($_POST['spam_master_recaptcha_theme'])){
 update_option('spam_master_recaptcha_theme', $_POST['spam_master_recaptcha_theme'] );
 }
@@ -104,36 +116,47 @@ $wp_list_table->display();
 <fieldset class="options">
 <p>
 <input name="spam_master_recaptcha" id="spam_master_recaptcha" value="true" type="checkbox" <?php if(is_multisite()){echo get_blog_option($blog_id, 'spam_master_recaptcha') == 'true' ? 'checked="checked"':'';}else{echo get_option('spam_master_recaptcha') == 'true' ? 'checked="checked"':'';} ?> />
-<label for="spam_master_recaptcha"><b><?php _e('Activate Re-Captcha', 'spam_master_recaptcha'); ?></b></label>
+<label for="spam_master_recaptcha"><b><?php _e('Activate Re-Captcha', 'spam_master'); ?></b></label>
 </p>
 <p>
 <input id="spam_master_recaptcha_public_key" name="spam_master_recaptcha_public_key" type="text" size="16" value="<?php if(is_multisite()){echo get_blog_option($blog_id, 'spam_master_recaptcha_public_key');}else{echo get_option('spam_master_recaptcha_public_key');} ?>">
-<label for="spam_master_recaptcha_public_key"><?php _e('Re-Captcha API Site Key', 'spam_master_recaptcha'); ?></label>
+<label for="spam_master_recaptcha_public_key"><?php _e('Re-Captcha API Site Key', 'spam_master'); ?></label>
+</p>
+<p>
+<input id="spam_master_recaptcha_secret_key" name="spam_master_recaptcha_secret_key" type="text" size="16" value="<?php if(is_multisite()){echo get_blog_option($blog_id, 'spam_master_recaptcha_secret_key');}else{echo get_option('spam_master_recaptcha_secret_key');} ?>">
+<label for="spam_master_recaptcha_secret_key"><?php _e('Re-Captcha API Secret Key', 'spam_master'); ?></label>
 </p>
 <p>
 <input id="spam_master_recaptcha_theme" name="spam_master_recaptcha_theme" type="text" size="16" value="<?php if(is_multisite()){echo get_blog_option($blog_id, 'spam_master_recaptcha_theme');}else{echo get_option('spam_master_recaptcha_theme');} ?>">
-<label for="spam_master_recaptcha_theme"><?php _e(' Color Scheme', 'spam_master_recaptcha'); ?></label>
+<label for="spam_master_recaptcha_theme"><?php _e(' Color Scheme', 'spam_master'); ?></label>
 <div class="description">Color Scheme options are: <b>light</b> or <b>dark</b>.</div>
 </p>
 <?php
 if(is_multisite()){
 $spam_master_recaptcha = get_blog_option($blog_id, 'spam_master_recaptcha');
 $spam_master_recaptcha_public_key = get_blog_option($blog_id, 'spam_master_recaptcha_public_key');
+$spam_master_recaptcha_secret_key = get_option('spam_master_recaptcha_secret_key');
 $spam_master_recaptcha_theme = get_blog_option($blog_id,'spam_master_recaptcha_theme');
 }
 else{
 $spam_master_recaptcha = get_option('spam_master_recaptcha');
 $spam_master_recaptcha_public_key = get_option('spam_master_recaptcha_public_key');
+$spam_master_recaptcha_secret_key = get_option('spam_master_recaptcha_secret_key');
 $spam_master_recaptcha_theme = get_option('spam_master_recaptcha_theme');
 }
 if ($spam_master_recaptcha == 'true' ){
-	if ($spam_master_recaptcha_public_key !== '' ){
+	if ($spam_master_recaptcha_public_key !== ''){
+		if ($spam_master_recaptcha_secret_key !== ''){
 echo '<script src="https://www.google.com/recaptcha/api.js"></script>' .
 '<div class="g-recaptcha" data-theme="'.$spam_master_recaptcha_theme.'" data-sitekey="'.$spam_master_recaptcha_public_key.'"></div>';
-}
-else{
-echo '<div id="message" class="error"><p>Warning... Re-Captcha Acivated without Public Key</p></div>';
-}
+		}
+		else{
+		echo '<div id="message" class="error"><p>Warning... Re-Captcha Activated without <b>Secret Key</b>.</p><p>Click below "Get your free google re-captcha key".</p></div>';
+		}
+	}
+	else{
+	echo '<div id="message" class="error"><p>Warning... Re-Captcha Activated without <b>Public Key</b>.</p><p>Click below "Get your free google re-captcha key".</p></div>';
+	}
 }
 ?>
 <!--HONEYPOT ADMIN-->
@@ -154,11 +177,11 @@ $wp_list_table->display();
 ?>
 <p>
 <input name="spam_master_honeypot_timetrap" id="spam_master_honeypot_timetrap" value="true" type="checkbox" <?php if(is_multisite()){echo get_blog_option($blog_id, 'spam_master_honeypot_timetrap') == 'true' ? 'checked="checked"':'';}else{echo get_option('spam_master_honeypot_timetrap') == 'true' ? 'checked="checked"':'';} ?> />
-<label for="spam_master_honeypot_timetrap"><b><?php _e('Activate Time Trap', 'spam_master_recaptcha'); ?></b></label>
+<label for="spam_master_honeypot_timetrap"><b><?php _e('Activate Time Trap', 'spam_master'); ?></b></label>
 </p>
 <p>
 <input id="spam_master_honeypot_timetrap_speed" name="spam_master_honeypot_timetrap_speed" type="text" size="16" value="<?php if(is_multisite()){echo get_blog_option($blog_id, 'spam_master_honeypot_timetrap_speed');}else{echo get_option('spam_master_honeypot_timetrap_speed');} ?>">
-<label for="spam_master_honeypot_timetrap_speed"><?php _e('Honeypot Trap Speed', 'spam_master_recaptcha'); ?></label>
+<label for="spam_master_honeypot_timetrap_speed"><?php _e('Honeypot Trap Speed', 'spam_master'); ?></label>
 <div class="description">Time trap checks for how fast the "bots" are trying to submit the registration data. Default is <b>5</b> seconds.</div>
 </p>
 <p class="submit"><input class='button-primary' type='submit' name='update' value='<?php _e("Save & Preview", 'spam_master'); ?>' id='submitbutton' /></p>
@@ -213,15 +236,17 @@ global $wpdb, $blog_id;
 <label>Re-CAPTCHA Code</label>
 <?php
 if(is_multisite()){
-	$spam_master_public_key = get_blog_option($blog_id, 'spam_master_recaptcha_public_key');
+	$spam_master_recaptcha_public_key = get_blog_option($blog_id, 'spam_master_recaptcha_public_key');
+	$spam_master_recaptcha_secret_key = get_blog_option($blog_id, 'spam_master_recaptcha_secret_key');
 	$spam_master_recaptcha_theme = get_blog_option($blog_id, 'spam_master_recaptcha_theme');
 }
 else{
-	$spam_master_public_key = get_option('spam_master_recaptcha_public_key');
+	$spam_master_recaptcha_public_key = get_option('spam_master_recaptcha_public_key');
+	$spam_master_recaptcha_secret_key = get_option('spam_master_recaptcha_secret_key');
 	$spam_master_recaptcha_theme = get_option('spam_master_recaptcha_theme');
 }
 echo '<script src="https://www.google.com/recaptcha/api.js"></script>' .
-'<div class="g-recaptcha" data-theme="'.$spam_master_recaptcha_theme.'" data-sitekey="'.$spam_master_public_key.'"></div>';
+'<div class="g-recaptcha" data-theme="'.$spam_master_recaptcha_theme.'" data-sitekey="'.$spam_master_recaptcha_public_key.'"></div>';
 if (is_multisite()){
 ?>
 <p>Press <b>Next</b> after verifying captcha.</p>
@@ -265,54 +290,94 @@ $captcha=$_POST['g-recaptcha-response'];
 return $errors;
 }
 //END ERRORS VALIDATION
-	}
-}
 //////////////
 //BUDDYPRESS//
 //////////////
 if($spam_master_buddypress == 1){
 add_action( 'bp_before_registration_submit_buttons', 'spam_master_buddypress_protection' );
 add_action( 'bp_signup_validate', 'spam_master_buddypress_protection_validate' );
+//add_action( 'bp_core_validate_user_signup', 'spam_master_buddypress_protection' );
 
 function spam_master_buddypress_protection(){
-global $bp, $errors;
+global $bp, $errors, $captcha, $strError;
 	if(is_multisite()){
-		$spam_master_public_key = get_blog_option($blog_id, 'spam_master_recaptcha_public_key');
+		$spam_master_recaptcha_public_key = get_blog_option($blog_id, 'spam_master_recaptcha_public_key');
+		$spam_master_recaptcha_secret_key = get_blog_option($blog_id, 'spam_master_recaptcha_secret_key');
 		$spam_master_recaptcha_theme = get_blog_option($blog_id, 'spam_master_recaptcha_theme');
 	}
 	else{
-		$spam_master_public_key = get_option('spam_master_recaptcha_public_key');
+		$spam_master_recaptcha_public_key = get_option('spam_master_recaptcha_public_key');
+		$spam_master_recaptcha_secret_key = get_option('spam_master_recaptcha_secret_key');
 		$spam_master_recaptcha_theme = get_option('spam_master_recaptcha_theme');
 	}
 	$html = '<div class="register-section" id="profile-details-section">';
 	$html .= '<div class="editfield">';
 	$html .= '<script src="https://www.google.com/recaptcha/api.js"></script>';
 	$html .= '<label>Re-CAPTCHA Code</label>';
-	if(isset($_POST['g-recaptcha-response'])){
-		$captcha=$_POST['g-recaptcha-response'];
-			if(!$captcha){
-				$html .= '<div class="error">';
-				$html .= spam_master_buddypress_protection_validate($errors);
-				$html .= '</div>';
-			}
+	if (!empty($bp->signup->errors['error_pub'])){
+		$html .= '<div class="error">';
+		$html .= $bp->signup->errors['error_pub'];
+		$html .= '</div>';
 	}
-	$html .= '<div class="g-recaptcha" data-theme="'.$spam_master_recaptcha_theme.'" data-sitekey="'.$spam_master_public_key.'"></div>';
+	if (!empty($bp->signup->errors['error_sec'])){
+		$html .= '<div class="error">';
+		$html .= $bp->signup->errors['error_sec'];
+		$html .= '</div>';
+	}
+	if (!empty($bp->signup->errors['recaptcha_response_field'])) {
+		$html .= '<div class="error">';
+		$html .= $bp->signup->errors['recaptcha_response_field'];
+		$html .= '</div>';
+	}
+	$html .= '<div class="g-recaptcha" data-theme="'.$spam_master_recaptcha_theme.'" data-sitekey="'.$spam_master_recaptcha_public_key.'"></div>';
 	$html .= '<p class="small">Press <b>Complete</b> after verifying captcha</p>';
 	$html .= '</div>';
 	$html .= '</div>';
 	echo $html;
 }
 function spam_master_buddypress_protection_validate($errors){
-global $bp, $errors;
-	if(isset($_POST['g-recaptcha-response'])){
-		$captcha=$_POST['g-recaptcha-response'];
-			if(!$captcha){
-				$errors = '<strong>SPAM MASTER</strong>: Insert Correct Captcha';
-			}
+global $bp, $strError, $strErrorPub, $strErrorSec;
+	if(is_multisite()){
+		$spam_master_recaptcha_public_key = get_blog_option($blog_id, 'spam_master_recaptcha_public_key');
+		$spam_master_recaptcha_secret_key = get_blog_option($blog_id, 'spam_master_recaptcha_secret_key');
+		$spam_master_recaptcha_theme = get_blog_option($blog_id, 'spam_master_recaptcha_theme');
 	}
-return $errors;
+	else{
+		$spam_master_recaptcha_public_key = get_option('spam_master_recaptcha_public_key');
+		$spam_master_recaptcha_secret_key = get_option('spam_master_recaptcha_secret_key');
+		$spam_master_recaptcha_theme = get_option('spam_master_recaptcha_theme');
+	}
+	$strError = __('Please check the CAPTCHA code', 'spam_master');
+	$strErrorPub = __('Insert CAPTCHA Public Key', 'spam_master');
+	$strErrorSec = __('Insert CAPTCHA Private Key', 'spam_master');
+	$response = isset( $_POST['g-recaptcha-response'] ) ? esc_attr( $_POST['g-recaptcha-response'] ) : '';
+	$remote_ip = $_SERVER["REMOTE_ADDR"];
+
+	$request = wp_remote_get(
+		'https://www.google.com/recaptcha/api/siteverify?secret='.$spam_master_recaptcha_secret_key.'&response=' . $response . '&remoteip=' . $remote_ip
+	);
+	$response_body = wp_remote_retrieve_body( $request );
+	$result = json_decode( $response_body, true );
+
+	if (!$result['success']){
+		@$bp->signup->errors['recaptcha_response_field'] = $strError;
+		//@$bp->signup->errors['recaptcha_response_field'] = $result;
+	}
+
+	if(empty($spam_master_recaptcha_public_key)){
+		@$bp->signup->errors['error_pub'] = $strErrorPub;
+	}
+	if(empty($spam_master_recaptcha_secret_key)){
+		@$bp->signup->errors['error_sec'] = $strErrorSec;
+	}
+
+	return;
 }
 
 }
 else{
+}
+
+//END $spam_master_recaptcha - true
+	}
 }

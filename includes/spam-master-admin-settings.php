@@ -86,7 +86,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 		function spam_master_buddypress_init(){
 			function spam_master_buddypress_register($result){
 			global $wpdb;
-				if (spam_master_buddypress_spammail($result['user_email']))
+				if (spam_master_buddypress_spammail($result['user_email'])){
 					if(is_multisite()){
 						$blog_id = get_current_blog_id();
 						$result['errors']->add('user_email',__('<strong>SPAM MASTER</strong>' . get_blog_option($blog_id, 'spam_master_message'),'spam_master'))& set_site_transient('spam_master_invalid_email'.current_time( 'mysql' ), "Date: ".current_time( 'mysql' )." - Email: ".$result['user_email'], 604800 );
@@ -102,6 +102,7 @@ require_once( dirname( __FILE__ ) . '/spam-master-learning.php');
 						$table_prefix = $wpdb->base_prefix;
 						$count = $wpdb->query("UPDATE {$table_prefix}options SET option_value=option_value + 1 WHERE option_name='spam_master_block_count'");
 					}
+				}
 				return $result;
 			}
 			add_filter( 'bp_core_validate_user_signup', 'spam_master_buddypress_register' );

@@ -3,7 +3,7 @@ Contributors: Techgasp
 Tags: wordpress, plugin, spam, antispam, anti-spam, registration, hotmail, bot, captcha, comment, block registration, block user
 Requires at least: 3.5
 Tested up to: 4.1.1
-Stable tag: 4.4.1.4
+Stable tag: 4.4.1.5
 License: GPLv2 or later
 
 Spam Master is the Ultimate Spam Protection plugin that blocks new user registrations and post comments with Real Time anti-spam lists.
@@ -85,18 +85,21 @@ Very few plugins will actually show the statistics we packed into spam master. S
 
 == Screenshots ==
 
-1. Main Plugin Page with News and Help Buttons
-2. New Plugin Menu
-3. Settings Page
-4. Registrations Page
-5. Comments Page
-6. Protection List Page
+1. Main Plugin Menu
+2. Settings Page
+3. Registrations Page
+4. Comments Page
+5. Protection List Page
+6. Protection Tools Page
 7. Statistics Page
-8. Wordpress Admin Registration, Spam Master in action blocking a user registration. Below, Buddypress Registration, Spam Master in action blocking a user registration
+8. Wordpress and Buddypress Registration. Spam Master with re-CAPTCHA plus Honeypot traps
 9. Spam Master Marking Comment as SPAM from Registered User, Spam Master marking Comment as SPAM after akismet cleared it
 
 
 == Changelog ==
+
+= 4.4.1.5 =
+* Tweaking re-captcha verification in Buddypress
 
 = 4.4.1.4 =
 * Getting all network sites to work with blog id 1

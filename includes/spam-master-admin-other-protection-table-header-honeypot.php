@@ -26,7 +26,7 @@ class spam_master_other_protection_table_header_honeypot extends WP_List_Table {
 		<tr>
 			<td class="column-columnname">
 <p>This is an optional setting. Activating Honeypot adds invisible traps for "bots" or "robots in <b>Wordpress</b> or <b>Buddypress</b> registration page.</p>
-<p>"Normal persons" or "humans" will not see these traps, more about <a href="http://en.wikipedia.org/wiki/Honeypot_(computing)" title="honeypot" target="_blank">honeypot</a>.</p>
+<p>"persons" or "humans" will not see these traps, more about <a href="http://en.wikipedia.org/wiki/Honeypot_(computing)" title="honeypot" target="_blank">honeypot</a>.</p>
 			</td>
 		</tr>
 	</tbody>

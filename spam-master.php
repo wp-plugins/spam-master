@@ -2,7 +2,7 @@
 /**
 Plugin Name: Spam Master
 Plugin URI: http://wordpress.techgasp.com/spam-master/
-Version: 4.4.1.4
+Version: 4.4.1.5
 Author: TechGasp
 Author URI: http://wordpress.techgasp.com
 Text Domain: spam-master
@@ -28,9 +28,9 @@ if(!class_exists('spam_master')) :
 ///////DEFINE VERSION///////
 define('SPAM_MASTER_ID', 'spam-master');
 ///////DEFINE VERSION///////
-define( 'spam_master_VERSION', '4.4.1.4' );
+define( 'spam_master_VERSION', '4.4.1.5' );
 global $spam_master_version, $spam_master_name, $blog_id;
-$spam_master_version = "4.4.1.4"; //for other pages
+$spam_master_version = "4.4.1.5"; //for other pages
 $spam_master_name = "Spam Master"; //pretty name
 if( is_multisite() ) {
 update_blog_option($blog_id, 'spam_master_installed_version', $spam_master_version);
