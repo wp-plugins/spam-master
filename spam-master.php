@@ -2,7 +2,7 @@
 /**
 Plugin Name: Spam Master
 Plugin URI: http://wordpress.techgasp.com/spam-master/
-Version: 4.4.1.5
+Version: 4.4.1.6
 Author: TechGasp
 Author URI: http://wordpress.techgasp.com
 Text Domain: spam-master
@@ -28,9 +28,9 @@ if(!class_exists('spam_master')) :
 ///////DEFINE VERSION///////
 define('SPAM_MASTER_ID', 'spam-master');
 ///////DEFINE VERSION///////
-define( 'spam_master_VERSION', '4.4.1.5' );
+define( 'spam_master_VERSION', '4.4.1.6' );
 global $spam_master_version, $spam_master_name, $blog_id;
-$spam_master_version = "4.4.1.5"; //for other pages
+$spam_master_version = "4.4.1.6"; //for other pages
 $spam_master_name = "Spam Master"; //pretty name
 if( is_multisite() ) {
 update_blog_option($blog_id, 'spam_master_installed_version', $spam_master_version);
@@ -48,22 +48,7 @@ require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-settings.php');
 // HOOK THREATS
 require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-threats.php');
 // HOOK Re-CAPTACHA & HONEYPOT if 200
-if(is_multisite()){
-	if (get_blog_option($blog_id, 'spam_master_response_key') == 200){
-		require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-other-protection.php');
-	}
-	else{
-		require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-other-protection-simple.php');
-	}
-}
-else{
-	if (get_option('spam_master_response_key') == 200){
-		require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-other-protection.php');
-	}
-	else{
-		require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-other-protection-simple.php');
-	}
-}
+require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-other-protection.php');
 // HOOK REGISTRATIONS
 if(is_multisite()){
 	require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-registrations-network-admin.php');
@@ -81,8 +66,6 @@ if(is_multisite()){
 require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-statistics.php');
 // HOOK UPDATER
 require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-updater.php');
-// HOOK INVITATION
-require_once( dirname( __FILE__ ) . '/includes/spam-master-admin-invite.php');
 
 class spam_master{
 //REGISTER PLUGIN
@@ -130,8 +113,7 @@ update_option( 'spam_master_newest_version', $r->new_version );
 }
 }
 }
-		// Advanced Updater
-
+// Advanced Updater
 //END CLASS
 //Updater Label Message
 public static function spam_master_updater_message() {
